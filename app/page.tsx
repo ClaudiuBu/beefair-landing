@@ -69,18 +69,24 @@ export default function Home() {
           Smart living for <span className="text-yellow-400 font-normal italic">busy bees</span>
         </h2>
 
-        <div id="join" className="max-w-md mx-auto relative mb-20">
+           <div id="join" className="max-w-md mx-auto relative">
           {!submitted ? (
-            <form onSubmit={handleSubmit} className="flex flex-col sm:flex-row gap-3">
+            <form 
+              action="https://formspree.io/f/mreqbryb" 
+              method="POST" 
+              className="flex flex-col sm:flex-row gap-3"
+            >
               <input 
                 type="email" 
+                name="email"  // <--- FOARTE IMPORTANT: Formspree are nevoie de acest 'name'
                 placeholder="Adresa ta de email..." 
-                className="flex-1 bg-neutral-900 border border-white/10 text-white px-4 py-3 rounded-xl focus:outline-none focus:ring-2 focus:ring-yellow-400/50"
-                value={email}
-                onChange={(e) => setEmail(e.target.value)}
+                className="flex-1 bg-neutral-900 border border-white/10 text-white px-4 py-3 rounded-xl focus:outline-none focus:ring-2 focus:ring-yellow-400/50 placeholder:text-neutral-600"
                 required
               />
-              <button type="submit" className="bg-yellow-400 hover:bg-yellow-500 text-black font-bold px-6 py-3 rounded-xl transition-all flex items-center justify-center gap-2 group">
+              <button 
+                type="submit"
+                className="bg-yellow-400 hover:bg-yellow-500 text-black font-bold px-6 py-3 rounded-xl transition-all flex items-center justify-center gap-2 group"
+              >
                 Intră în Stup
                 <ChevronRight className="w-4 h-4 group-hover:translate-x-1 transition-transform" />
               </button>
@@ -88,9 +94,13 @@ export default function Home() {
           ) : (
             <div className="bg-green-500/10 border border-green-500/20 text-green-400 p-4 rounded-xl flex items-center justify-center gap-2 animate-in fade-in zoom-in">
               <CheckCircle2 className="w-5 h-5" />
-              <span>Te-am trecut pe listă! 🐝</span>
+              <span>Te-am trecut pe listă! Îți dăm un semn la lansare. 🐝</span>
             </div>
           )}
+          <p className="text-neutral-600 text-xs mt-3">
+            <ShieldCheck className="w-3 h-3 inline mr-1" />
+            Nu trimitem spam. Doar update-uri importante.
+          </p>
         </div>
       </section>
 
