@@ -63,7 +63,7 @@ export default function Home() {
               width={140}
               height={40}
               priority
-              className="w-auto h-10 object-contain"
+              className="w-auto object-contain"
             />
           </div>
           <a href="#join" className="hidden md:block text-sm font-medium text-neutral-400 hover:text-yellow-400 transition-colors">
@@ -118,6 +118,22 @@ export default function Home() {
                 Nu trimitem spam. Doar update-uri importante.
             </p>
         </div>
+
+        {/* --- MOCKUP APLICATIE (Nou) --- */}
+        <div className="mt-20 relative w-full max-w-5xl mx-auto">
+            {/* Efect de aură (Glow) în spatele telefonului */}
+            <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[120%] h-[120%] bg-yellow-400/10 blur-[80px] -z-10 rounded-full"></div>
+            
+            <Image 
+                src="/img/app-mockup.png" // Asigură-te că numele fișierului e corect în folderul public
+                alt="BeeFair App Interface"
+                width={1200}
+                height={800}
+                priority
+                className="rounded-3xl border border-white/10 shadow-2xl mx-auto w-full h-auto"
+            />
+        </div>
+
       </section>
 
       {/* --- HOW IT WORKS (CARD-IN-CARD DESIGN) --- */}
