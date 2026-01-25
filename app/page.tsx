@@ -52,14 +52,13 @@ export default function Home() {
 
   return (
     <div className="min-h-screen bg-neutral-950 text-white font-sans selection:bg-yellow-500 selection:text-black">
-      
       {/* --- NAVBAR --- */}
       <nav className="fixed top-0 w-full z-50 border-b border-white/10 bg-neutral-950/80 backdrop-blur-md">
         <div className="max-w-6xl mx-auto px-6 h-16 flex items-center justify-between">
           <div className="flex items-center">
              {/* Asigura-te ca ai imaginea logo.png sau logo_desktop.png in folderul public */}
             <Image 
-              src="/logo.png" 
+              src="/img/logo_desktop.png" 
               alt="BeeFair Logo"
               width={140}
               height={40}
