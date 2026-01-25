@@ -71,14 +71,23 @@ export default function Home() {
 
            <div id="join" className="max-w-md mx-auto relative">
           {!submitted ? (
-            <form 
+             <form 
               action="https://formspree.io/f/mreqbryb" 
               method="POST" 
               className="flex flex-col sm:flex-row gap-3"
             >
+              {/* --- AICI ESTE SECRETUL PENTRU REDIRECT --- */}
+              {/* Înlocuiește https://beefair.ro cu linkul tău dacă e diferit */}
+              <input 
+                type="hidden" 
+                name="_next" 
+                value="https://www.beefair.ro/thank-you" 
+              />
+              {/* ------------------------------------------ */}
+
               <input 
                 type="email" 
-                name="email"  // <--- FOARTE IMPORTANT: Formspree are nevoie de acest 'name'
+                name="email" 
                 placeholder="Adresa ta de email..." 
                 className="flex-1 bg-neutral-900 border border-white/10 text-white px-4 py-3 rounded-xl focus:outline-none focus:ring-2 focus:ring-yellow-400/50 placeholder:text-neutral-600"
                 required
