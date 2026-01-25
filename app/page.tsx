@@ -22,11 +22,9 @@ export default function Home() {
   const [activeStep, setActiveStep] = useState(0);
 
   const handleSubmit = (e: React.FormEvent) => {
-    e.preventDefault();
-    if (email) {
-      setSubmitted(true);
-      setEmail('');
-    }
+    // Formspree se ocupa de submit daca nu pui preventDefault, 
+    // dar daca vrei sa arati mesajul de succes fara refresh, folosim un mic trick
+    // Pentru moment, lasam formularul sa faca POST direct catre Formspree
   };
 
   return (
@@ -76,7 +74,7 @@ export default function Home() {
                 type="email" 
                 name="email"
                 placeholder="Adresa ta de email..." 
-                className="flex-1 bg-neutral-900 border border-white/10 text-white px-4 py-3 rounded-xl focus:outline-none focus:ring-2 focus:ring-yellow-400/50"
+                className="flex-1 bg-neutral-900 border border-white/10 text-white px-4 py-3 rounded-xl focus:outline-none focus:ring-2 focus:ring-yellow-400/50 placeholder:text-neutral-600"
                 required
               />
               <button type="submit" className="bg-yellow-400 hover:bg-yellow-500 text-black font-bold px-6 py-3 rounded-xl transition-all flex items-center justify-center gap-2 group">
@@ -99,10 +97,10 @@ export default function Home() {
           
           <div className="flex items-center gap-4 mb-16">
             <h2 className="text-2xl md:text-3xl font-bold">How it Works</h2>
-            
+            <div className="h-px flex-1 bg-gradient-to-r from-white/10 to-transparent" />
           </div>
 
-          {/* Timeline - Scrollable on mobile */}
+          {/* Timeline */}
           <div className="relative mb-24 overflow-x-auto no-scrollbar pt-4">
             <div className="flex justify-between min-w-[600px] md:min-w-full relative z-10 px-4">
               {STEPS.map((step, index) => (
@@ -136,6 +134,7 @@ export default function Home() {
                 </button>
               ))}
             </div>
+            {/* Progress Lines */}
             <div className="absolute top-[75px] md:top-[90px] left-0 w-full h-[1px] bg-white/5 -z-0" />
             <motion.div 
               className="absolute top-[75px] md:top-[90px] left-0 h-[1px] bg-yellow-400 shadow-[0_0_10px_rgba(250,204,21,0.4)] -z-0"
@@ -153,33 +152,29 @@ export default function Home() {
                   initial={{ opacity: 0, x: -10 }}
                   animate={{ opacity: 1, x: 0 }}
                   exit={{ opacity: 0, x: 10 }}
-                  className="bg-black/40 border border-white/5 p-8 rounded-3xl h-full"
+                  className="bg-black/40 border border-white/5 p-8 rounded-3xl h-full flex flex-col justify-center"
                 >
                   <div className="w-12 h-12 bg-yellow-400 rounded-xl flex items-center justify-center mb-6 shadow-lg shadow-yellow-400/10">
                     <MousePointer2 className="w-6 h-6 text-black" />
                   </div>
                   <h3 className="text-xl font-bold mb-4 md:hidden text-yellow-400">{STEPS[activeStep].title}</h3>
-                  <p className="text-lg text-neutral-300 leading-relaxed font-medium">
+                  <p className="text-lg text-neutral-300 leading-relaxed font-medium italic">
                     {STEPS[activeStep].desc}
                   </p>
                 </motion.div>
               </AnimatePresence>
             </div>
 
+            {/* --- CARD-UL MIC AURIU (RESTAURAT) --- */}
             <div className="md:col-span-2">
-              {/* --- CARD-UL MIC AURIU (RESTAURAT) --- */}
-              <div className="relative overflow-hidden bg-gradient-to-br from-yellow-400/20 via-yellow-400/5 to-transparent border border-yellow-400/30 p-8 rounded-3xl h-full flex flex-col justify-center backdrop-blur-md">
-                {/* Glow intens in colt */}
-                <div className="absolute -right-12 -bottom-12 w-40 h-40 bg-yellow-500/20 blur-[60px] rounded-full pointer-events-none" />
-                
-                <div className="flex gap-3 mb-4 relative z-10">
-                  <div className="bg-yellow-400 p-1.5 rounded-full shadow-[0_0_15px_rgba(250,204,21,0.4)]">
-                    <Info className="w-3.5 h-3.5 text-black" />
-                  </div>
-                  <span className="text-[10px] font-bold uppercase tracking-widest text-yellow-400">De ce BeeFair?</span>
+              <div className="bg-yellow-400/5 border border-yellow-400/10 p-8 rounded-3xl h-full flex flex-col justify-center relative overflow-hidden group">
+                <div className="absolute -right-4 -top-4 w-24 h-24 bg-yellow-400/10 blur-2xl group-hover:bg-yellow-400/20 transition-all"></div>
+                <div className="flex gap-4 mb-4 items-center">
+                  <Info className="w-5 h-5 text-yellow-400" />
+                  <span className="text-xs font-bold uppercase tracking-widest text-yellow-400/60">What Makes Us Different</span>
                 </div>
-                <p className="text-neutral-200 text-sm italic leading-relaxed relative z-10 font-medium">
-                  "Spre deosebire de alte soluții, BeeFair permite grupului să strângă banii **înainte** de plată. Fără bătăi de cap, fără datorii între prieteni."
+                <p className="text-neutral-300 italic text-sm leading-relaxed relative z-10">
+                  "BeeFair elimină discuțiile inconfortabile. Grupul strânge banii în avans, iar plata se face dintr-un singur loc. Simplu, corect, automat."
                 </p>
               </div>
             </div>
