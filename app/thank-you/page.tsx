@@ -11,7 +11,7 @@ export default function ThankYou() {
 
       {/* Logo (Optional - dacă vrei să apară și aici) */}
       <div className="mb-8">
-        <Image src="/logo.png" alt="BeeFair" width={120} height={40} className="mx-auto opacity-80" />
+        <Image src="/img/logo_desktop.png" alt="BeeFair" width={120} height={40} className="mx-auto opacity-80" />
       </div>
 
       {/* Main Card */}
