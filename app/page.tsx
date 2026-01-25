@@ -22,11 +22,9 @@ export default function Home() {
   const [activeStep, setActiveStep] = useState(0);
 
   const handleSubmit = (e: React.FormEvent) => {
-    e.preventDefault();
-    if (email) {
-      setSubmitted(true);
-      setEmail('');
-    }
+    // Formspree se ocupa de submit daca nu pui preventDefault, 
+    // dar daca vrei sa arati mesajul de succes fara refresh, folosim un mic trick
+    // Pentru moment, lasam formularul sa faca POST direct catre Formspree
   };
 
   return (
@@ -69,7 +67,7 @@ export default function Home() {
           Smart living for <span className="text-yellow-400 font-normal italic">busy bees</span>
         </h2>
 
-           <div id="join" className="max-w-md mx-auto relative">
+        <div id="join" className="max-w-md mx-auto relative mb-12">
           {!submitted ? (
              <form 
               action="https://formspree.io/f/mreqbryb" 
@@ -92,43 +90,37 @@ export default function Home() {
                 className="flex-1 bg-neutral-900 border border-white/10 text-white px-4 py-3 rounded-xl focus:outline-none focus:ring-2 focus:ring-yellow-400/50 placeholder:text-neutral-600"
                 required
               />
-              <button 
-                type="submit"
-                className="bg-yellow-400 hover:bg-yellow-500 text-black font-bold px-6 py-3 rounded-xl transition-all flex items-center justify-center gap-2 group"
-              >
+              <button type="submit" className="bg-yellow-400 hover:bg-yellow-500 text-black font-bold px-6 py-3 rounded-xl transition-all flex items-center justify-center gap-2 group">
                 Intră în Stup
                 <ChevronRight className="w-4 h-4 group-hover:translate-x-1 transition-transform" />
               </button>
             </form>
           ) : (
-            <div className="bg-green-500/10 border border-green-500/20 text-green-400 p-4 rounded-xl flex items-center justify-center gap-2 animate-in fade-in zoom-in">
+            <div className="bg-green-500/10 border border-green-500/20 text-green-400 p-4 rounded-xl flex items-center justify-center gap-2">
               <CheckCircle2 className="w-5 h-5" />
-              <span>Te-am trecut pe listă! Îți dăm un semn la lansare. 🐝</span>
+              <span>Te-am trecut pe listă! 🐝</span>
             </div>
           )}
-          <p className="text-neutral-600 text-xs mt-3">
-            <ShieldCheck className="w-3 h-3 inline mr-1" />
-            Nu trimitem spam. Doar update-uri importante.
-          </p>
         </div>
       </section>
 
-      {/* --- HOW IT WORKS (ANIMATED) --- */}
-      <section className="py-24 px-6 overflow-hidden">
-        <div className="max-w-5xl mx-auto">
+      {/* --- HOW IT WORKS (CARD-IN-CARD DESIGN) --- */}
+      <section className="py-24 px-4">
+        <div className="max-w-5xl mx-auto bg-neutral-900/20 border border-white/5 rounded-[40px] p-8 md:p-16 backdrop-blur-sm relative overflow-hidden">
+          
           <div className="flex items-center gap-4 mb-16">
-            <h2 className="text-3xl font-bold">How it Works</h2>
-            <div className="h-px flex-1 bg-gradient-to-r from-white/20 to-transparent"></div>
+            <h2 className="text-2xl md:text-3xl font-bold">How it Works</h2>
+            <div className="h-px flex-1 bg-gradient-to-r from-white/10 to-transparent" />
           </div>
 
-          {/* Timeline Wrapper */}
-          <div className="relative mb-24 px-4">
-            <div className="flex justify-between relative z-10">
+          {/* Timeline */}
+          <div className="relative mb-24 overflow-x-auto no-scrollbar pt-4">
+            <div className="flex justify-between min-w-[600px] md:min-w-full relative z-10 px-4">
               {STEPS.map((step, index) => (
                 <button
                   key={step.id}
                   onClick={() => setActiveStep(index)}
-                  className="group flex flex-col items-center relative"
+                  className="flex flex-col items-center group relative"
                   style={{ width: '18%' }}
                 >
                   <motion.span 
@@ -137,75 +129,64 @@ export default function Home() {
                   >
                     {step.id}
                   </motion.span>
-                  
-                  {/* Dot */}
                   <div className="relative flex items-center justify-center">
                     <motion.div 
                       animate={{ 
                         scale: index === activeStep ? 1.2 : 1,
                         backgroundColor: index <= activeStep ? "#facc15" : "#171717"
                       }}
-                      className={`w-4 h-4 rounded-full border-2 border-neutral-800 z-20 transition-all shadow-xl`}
+                      className="w-4 h-4 rounded-full border-2 border-neutral-900 z-20"
                     />
                     {index === activeStep && (
-                      <motion.div 
-                        layoutId="glow"
-                        className="absolute w-8 h-8 bg-yellow-400/30 rounded-full blur-md"
-                      />
+                      <motion.div layoutId="glow" className="absolute w-8 h-8 bg-yellow-400/20 blur-md rounded-full" />
                     )}
                   </div>
-                  
-                  <span className={`mt-4 text-[10px] md:text-xs font-bold uppercase tracking-widest text-center transition-opacity duration-300 ${index === activeStep ? 'opacity-100 text-white' : 'opacity-40 text-neutral-500'}`}>
+                  <span className={`mt-4 text-[10px] font-bold uppercase tracking-widest transition-colors ${index === activeStep ? 'text-white' : 'text-neutral-600'}`}>
                     {step.title}
                   </span>
                 </button>
               ))}
             </div>
-
-            {/* Progress Bar Background */}
-            <div className="absolute top-[72px] md:top-[88px] left-0 w-full h-[3px] bg-white/5 rounded-full" />
-            
-            {/* Animated Gradient Progress Bar */}
+            {/* Progress Lines */}
+            <div className="absolute top-[75px] md:top-[90px] left-0 w-full h-[1px] bg-white/5 -z-0" />
             <motion.div 
-              className="absolute top-[72px] md:top-[88px] left-0 h-[3px] bg-gradient-to-r from-yellow-600 via-yellow-400 to-yellow-200 shadow-[0_0_15px_rgba(250,204,21,0.4)] rounded-full"
+              className="absolute top-[75px] md:top-[90px] left-0 h-[1px] bg-yellow-400 shadow-[0_0_10px_rgba(250,204,21,0.4)] -z-0"
               initial={{ width: "0%" }}
               animate={{ width: `${(activeStep / (STEPS.length - 1)) * 100}%` }}
-              transition={{ type: "spring", stiffness: 50, damping: 15 }}
+              transition={{ type: "spring", stiffness: 50 }}
             />
           </div>
 
-          {/* Content Card */}
-          <div className="grid md:grid-cols-5 gap-8 items-stretch">
+          <div className="grid md:grid-cols-5 gap-6">
             <div className="md:col-span-3">
               <AnimatePresence mode="wait">
                 <motion.div
                   key={activeStep}
-                  initial={{ opacity: 0, y: 10 }}
-                  animate={{ opacity: 1, y: 0 }}
-                  exit={{ opacity: 0, y: -10 }}
-                  className="bg-neutral-900/40 border border-white/5 p-8 rounded-3xl backdrop-blur-sm flex gap-6 h-full"
+                  initial={{ opacity: 0, x: -10 }}
+                  animate={{ opacity: 1, x: 0 }}
+                  exit={{ opacity: 0, x: 10 }}
+                  className="bg-black/40 border border-white/5 p-8 rounded-3xl h-full flex flex-col justify-center"
                 >
-                  <div className="w-14 h-14 rounded-2xl bg-yellow-400 flex items-center justify-center shrink-0 shadow-[0_0_20px_rgba(250,204,21,0.2)]">
+                  <div className="w-12 h-12 bg-yellow-400 rounded-xl flex items-center justify-center mb-6 shadow-lg shadow-yellow-400/10">
                     <MousePointer2 className="w-6 h-6 text-black" />
                   </div>
-                  <div>
-                    <h3 className="text-2xl font-bold mb-4 text-white">{STEPS[activeStep].title}</h3>
-                    <p className="text-neutral-400 text-lg leading-relaxed">
-                      {STEPS[activeStep].desc}
-                    </p>
-                  </div>
+                  <h3 className="text-xl font-bold mb-4 md:hidden text-yellow-400">{STEPS[activeStep].title}</h3>
+                  <p className="text-lg text-neutral-300 leading-relaxed font-medium italic">
+                    {STEPS[activeStep].desc}
+                  </p>
                 </motion.div>
               </AnimatePresence>
             </div>
 
+            {/* --- CARD-UL MIC AURIU (RESTAURAT) --- */}
             <div className="md:col-span-2">
               <div className="bg-yellow-400/5 border border-yellow-400/10 p-8 rounded-3xl h-full flex flex-col justify-center relative overflow-hidden group">
-                <div className="absolute -right-4 -top-4 w-24 h-24 bg-yellow-400/10 blur-2xl group-hover:bg-yellow-400/20 transition-all" />
-                <div className="flex gap-4 mb-4">
+                <div className="absolute -right-4 -top-4 w-24 h-24 bg-yellow-400/10 blur-2xl group-hover:bg-yellow-400/20 transition-all"></div>
+                <div className="flex gap-4 mb-4 items-center">
                   <Info className="w-5 h-5 text-yellow-400" />
                   <span className="text-xs font-bold uppercase tracking-widest text-yellow-400/60">What Makes Us Different</span>
                 </div>
-                <p className="text-neutral-300 italic text-sm leading-relaxed">
+                <p className="text-neutral-300 italic text-sm leading-relaxed relative z-10">
                   "BeeFair elimină discuțiile inconfortabile. Grupul strânge banii în avans, iar plata se face dintr-un singur loc. Simplu, corect, automat."
                 </p>
               </div>
@@ -215,40 +196,31 @@ export default function Home() {
       </section>
 
       {/* --- FEATURES GRID --- */}
-      <section className="py-20 bg-neutral-900/30 border-t border-white/5">
-        <div className="max-w-6xl mx-auto px-6">
-          <div className="grid md:grid-cols-3 gap-8">
-            <div className="p-8 rounded-2xl bg-neutral-900 border border-white/5 hover:border-yellow-400/30 transition-all group">
-              <div className="w-12 h-12 bg-neutral-800 rounded-lg flex items-center justify-center mb-6 group-hover:bg-yellow-400 group-hover:text-black transition-colors text-yellow-400">
-                <ScanLine className="w-6 h-6" />
-              </div>
-              <h3 className="text-xl font-bold mb-3">Snap & Scan</h3>
-              <p className="text-neutral-400 leading-relaxed">Faci o poză la contor sau factură, iar AI-ul nostru extrage datele instant.</p>
+      <section className="py-20 px-6 max-w-6xl mx-auto">
+        <div className="grid md:grid-cols-3 gap-8">
+          {[
+            { icon: ScanLine, title: "Snap & Scan", text: "Faci o poză la contor sau factură, iar AI-ul nostru extrage datele instant." },
+            { icon: Users, title: "Fair Split", text: "Calculăm automat cine cât datorează, fără Excel-uri sau calcule manuale." },
+            { icon: Zap, title: "The Sting", text: "Trimite un 'Sting' anonim colegilor care uită să plătească, direct din app." }
+          ].map((f, i) => (
+            <div key={i} className="p-10 rounded-3xl bg-neutral-900/40 border border-white/5 hover:border-yellow-400/20 transition-all group">
+              <f.icon className="w-10 h-10 text-yellow-400 mb-8 group-hover:scale-110 transition-transform" />
+              <h3 className="text-xl font-bold mb-4">{f.title}</h3>
+              <p className="text-neutral-500 leading-relaxed text-sm">{f.text}</p>
             </div>
-
-            <div className="p-8 rounded-2xl bg-neutral-900 border border-white/5 hover:border-yellow-400/30 transition-all group">
-              <div className="w-12 h-12 bg-neutral-800 rounded-lg flex items-center justify-center mb-6 group-hover:bg-yellow-400 group-hover:text-black transition-colors text-yellow-400">
-                <Users className="w-6 h-6" />
-              </div>
-              <h3 className="text-xl font-bold mb-3">Fair Split</h3>
-              <p className="text-neutral-400 leading-relaxed">Calculăm automat cine cât datorează, fără Excel-uri sau calcule manuale.</p>
-            </div>
-
-            <div className="p-8 rounded-2xl bg-neutral-900 border border-white/5 hover:border-yellow-400/30 transition-all group">
-              <div className="w-12 h-12 bg-neutral-800 rounded-lg flex items-center justify-center mb-6 group-hover:bg-yellow-400 group-hover:text-black transition-colors text-yellow-400">
-                <Zap className="w-6 h-6" />
-              </div>
-              <h3 className="text-xl font-bold mb-3">The Sting</h3>
-              <p className="text-neutral-400 leading-relaxed">Trimite un "Sting" anonim colegilor care uită să plătească, direct din app.</p>
-            </div>
-          </div>
+          ))}
         </div>
       </section>
 
       {/* --- FOOTER --- */}
-      <footer className="py-10 border-t border-white/10 text-center text-neutral-500 text-sm">
-        <p>&copy; {new Date().getFullYear()} BeeFair România. Toate drepturile rezervate.</p>
+      <footer className="py-12 border-t border-white/5 text-center px-6 text-neutral-600 text-sm">
+        <p>&copy; {new Date().getFullYear()} BeeFair România. Smart living for busy bees 🐝</p>
       </footer>
+
+      <style jsx global>{`
+        .no-scrollbar::-webkit-scrollbar { display: none; }
+        .no-scrollbar { -ms-overflow-style: none; scrollbar-width: none; }
+      `}</style>
     </div>
   );
 }
