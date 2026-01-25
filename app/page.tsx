@@ -47,7 +47,10 @@ export default function Home() {
             bani în apartament.
           </span>
         </h1>
-        
+
+      <h2 className="text-2xl md:text-3xl font-light text-neutral-300 mb-8 tracking-wide">
+          Smart living for <span className="text-yellow-400 font-normal italic">busy bees</span>
+      </h2>
         <p className="text-lg md:text-xl text-neutral-400 mb-10 max-w-2xl mx-auto leading-relaxed">
           BeeFair scanează facturile, le împarte corect și trimite notificări ("Sting") 
           colegilor care uită să plătească. Primul asistent financiar cu AI pentru Shared Living.
