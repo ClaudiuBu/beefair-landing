@@ -2,6 +2,7 @@
 
 import React, { useState } from 'react';
 import { ScanLine, Zap, Users, ChevronRight, CheckCircle2, ShieldCheck } from 'lucide-react';
+import Image from 'next/image';
 
 export default function Home() {
   const [email, setEmail] = useState('');
@@ -19,15 +20,21 @@ export default function Home() {
     <div className="min-h-screen bg-neutral-950 text-white font-sans selection:bg-yellow-500 selection:text-black">
       
       {/* --- NAVBAR --- */}
-      <nav className="fixed top-0 w-full z-50 border-b border-white/10 bg-neutral-950/80 backdrop-blur-md">
+<nav className="fixed top-0 w-full z-50 border-b border-white/10 bg-neutral-950/80 backdrop-blur-md">
         <div className="max-w-6xl mx-auto px-6 h-16 flex items-center justify-between">
-          <div className="flex items-center gap-2">
-            {/* Logo simplu geometric */}
-            <div className="w-8 h-8 bg-yellow-400 rounded-lg flex items-center justify-center text-black font-bold text-lg">
-              B
-            </div>
-            <span className="font-bold text-xl tracking-tight">BeeFair</span>
+          
+          {/* AICI ESTE MODIFICAREA PENTRU LOGO */}
+          <div className="flex items-center">
+            <Image 
+              src="/img/logo_desktop.png"       // Caută automat în folderul public
+              alt="BeeFair Logo"
+              width={140}           // Lățimea estimată (ajustează dacă e nevoie)
+              height={40}           // Înălțimea estimată
+              priority              // Încarcă logo-ul instant (fără întârziere)
+              className="h-10 w-auto object-contain" // CSS-ul care controlează dimensiunea finală
+            />
           </div>
+
           <a href="#join" className="hidden md:block text-sm font-medium text-neutral-400 hover:text-yellow-400 transition-colors">
             Contact
           </a>
