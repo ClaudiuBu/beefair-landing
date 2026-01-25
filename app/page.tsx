@@ -31,7 +31,7 @@ export default function Home() {
               width={140}           // Lățimea estimată (ajustează dacă e nevoie)
               height={40}           // Înălțimea estimată
               priority              // Încarcă logo-ul instant (fără întârziere)
-              className="h-10 w-auto object-contain" // CSS-ul care controlează dimensiunea finală
+              className="w-auto object-contain" // CSS-ul care controlează dimensiunea finală
             />
           </div>
 
