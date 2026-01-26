@@ -3,7 +3,8 @@
 import React, { useState } from 'react';
 import { 
   ScanLine, Zap, Users, ChevronRight, CheckCircle2, 
-  Info, MousePointer2, ShieldCheck 
+  Info, MousePointer2, ShieldCheck, 
+  Mail, MessageSquare, Send, MapPin 
 } from 'lucide-react';
 import Image from 'next/image';
 import { motion, AnimatePresence } from 'framer-motion';
@@ -22,6 +23,34 @@ export default function Home() {
   const [isSubmitting, setIsSubmitting] = useState(false); // Stare pentru loading
   const [activeStep, setActiveStep] = useState(0);
   const router = useRouter(); // Initializam routerul
+  // State pentru formularul de CONTACT (Nou)
+  const [contactStatus, setContactStatus] = useState<'idle' | 'submitting' | 'success' | 'error'>('idle');
+  
+  const handleContactSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
+    e.preventDefault();
+    setContactStatus('submitting');
+    
+    const formData = new FormData(e.currentTarget);
+    const data = Object.fromEntries(formData);
+
+    try {
+      // PUNE LINK-UL TAU DE FORMSPREE AICI (Poate fi acelasi sau unul nou)
+      const response = await fetch("https://formspree.io/f/mreqbryb", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify(data),
+      });
+
+      if (response.ok) {
+        setContactStatus('success');
+        (e.target as HTMLFormElement).reset(); // Goleste formularul
+      } else {
+        setContactStatus('error');
+      }
+    } catch (error) {
+      setContactStatus('error');
+    }
+  };
 
   // --- FUNCTIA CARE FACE MAGIA (Submit fara refresh) ---
   const handleSubmit = async (e: React.FormEvent) => {
@@ -241,6 +270,117 @@ export default function Home() {
               <p className="text-neutral-500 leading-relaxed text-sm">{f.text}</p>
             </div>
           ))}
+        </div>
+      </section>
+      {/* --- GET IN TOUCH SECTION --- */}
+      <section id="contact" className="py-24 px-6 bg-neutral-900/50 border-t border-white/5">
+        <div className="max-w-6xl mx-auto">
+          
+          <div className="grid md:grid-cols-2 gap-16 items-start">
+            
+            {/* Coloana Stânga: Info */}
+            <div>
+              <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-yellow-400/10 text-yellow-400 text-xs font-bold uppercase tracking-wider mb-6 border border-yellow-400/20">
+                <MessageSquare className="w-3 h-3" />
+                Support & Info
+              </div>
+              
+              <h2 className="text-4xl font-bold mb-6">Let's start a conversation.</h2>
+              <p className="text-neutral-400 text-lg leading-relaxed mb-10">
+                Ai întrebări despre cum funcționează BeeFair? Vrei să devenim parteneri sau doar să ne saluți? Suntem aici pentru tine.
+              </p>
+
+              <div className="space-y-6">
+                <div className="flex items-center gap-4 text-neutral-300">
+                  <div className="w-12 h-12 rounded-full bg-neutral-800 flex items-center justify-center text-yellow-400">
+                    <Mail className="w-5 h-5" />
+                  </div>
+                  <div>
+                    <p className="text-xs text-neutral-500 uppercase tracking-wider font-bold">Email</p>
+                    <a href="mailto:hello@beefair.ro" className="hover:text-yellow-400 transition-colors font-medium">hello@beefair.ro</a>
+                  </div>
+                </div>
+
+                <div className="flex items-center gap-4 text-neutral-300">
+                  <div className="w-12 h-12 rounded-full bg-neutral-800 flex items-center justify-center text-yellow-400">
+                    <MapPin className="w-5 h-5" />
+                  </div>
+                  <div>
+                    <p className="text-xs text-neutral-500 uppercase tracking-wider font-bold">Locație</p>
+                    <p className="font-medium">București, România (Campus Regie)</p>
+                  </div>
+                </div>
+              </div>
+            </div>
+
+            {/* Coloana Dreapta: Formular */}
+            <div className="bg-neutral-950 border border-white/10 p-8 rounded-3xl relative overflow-hidden">
+               {/* Glow effect discret */}
+               <div className="absolute top-0 right-0 w-32 h-32 bg-yellow-400/10 blur-[50px] rounded-full -z-10"></div>
+
+              {contactStatus === 'success' ? (
+                <div className="h-[300px] flex flex-col items-center justify-center text-center animate-in fade-in zoom-in">
+                  <div className="w-16 h-16 bg-green-500/10 rounded-full flex items-center justify-center mb-4 border border-green-500/20">
+                    <CheckCircle2 className="w-8 h-8 text-green-400" />
+                  </div>
+                  <h3 className="text-xl font-bold text-white mb-2">Mesaj trimis!</h3>
+                  <p className="text-neutral-400">Îți vom răspunde cât de repede putem.</p>
+                  <button onClick={() => setContactStatus('idle')} className="mt-6 text-yellow-400 hover:text-yellow-300 text-sm font-medium">
+                    Trimite alt mesaj
+                  </button>
+                </div>
+              ) : (
+                <form onSubmit={handleContactSubmit} className="space-y-4">
+                  <div>
+                    <label htmlFor="name" className="block text-xs font-bold text-neutral-500 uppercase tracking-wider mb-2">Numele tău</label>
+                    <input 
+                      type="text" 
+                      name="name"
+                      required
+                      placeholder="Ex: Alex Popescu"
+                      className="w-full bg-neutral-900 border border-white/10 text-white px-4 py-3 rounded-xl focus:outline-none focus:ring-2 focus:ring-yellow-400/50 placeholder:text-neutral-700 transition-all"
+                    />
+                  </div>
+
+                  <div>
+                    <label htmlFor="email_contact" className="block text-xs font-bold text-neutral-500 uppercase tracking-wider mb-2">Email</label>
+                    <input 
+                      type="email" 
+                      name="email"
+                      required
+                      placeholder="alex@email.com"
+                      className="w-full bg-neutral-900 border border-white/10 text-white px-4 py-3 rounded-xl focus:outline-none focus:ring-2 focus:ring-yellow-400/50 placeholder:text-neutral-700 transition-all"
+                    />
+                  </div>
+
+                  <div>
+                    <label htmlFor="message" className="block text-xs font-bold text-neutral-500 uppercase tracking-wider mb-2">Mesaj</label>
+                    <textarea 
+                      name="message"
+                      required
+                      rows={4}
+                      placeholder="Salut! Aș vrea să știu dacă..."
+                      className="w-full bg-neutral-900 border border-white/10 text-white px-4 py-3 rounded-xl focus:outline-none focus:ring-2 focus:ring-yellow-400/50 placeholder:text-neutral-700 transition-all resize-none"
+                    ></textarea>
+                  </div>
+
+                  <button 
+                    type="submit"
+                    disabled={contactStatus === 'submitting'}
+                    className="w-full bg-white hover:bg-neutral-200 text-black font-bold py-4 rounded-xl transition-all flex items-center justify-center gap-2 group disabled:opacity-70"
+                  >
+                    {contactStatus === 'submitting' ? 'Se trimite...' : 'Trimite Mesajul'}
+                    {!contactStatus.includes('submitting') && <Send className="w-4 h-4 group-hover:translate-x-1 transition-transform" />}
+                  </button>
+                  
+                  {contactStatus === 'error' && (
+                    <p className="text-red-400 text-sm text-center mt-2">A apărut o eroare. Încearcă din nou.</p>
+                  )}
+                </form>
+              )}
+            </div>
+
+          </div>
         </div>
       </section>
 
