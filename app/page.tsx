@@ -3,32 +3,158 @@
 import React, { useState } from 'react';
 import { 
   ScanLine, Zap, Users, ChevronRight, CheckCircle2, 
-  Info, MousePointer2, ShieldCheck, 
-  Mail, MessageSquare, Send, MapPin 
+  CreditCard, Sparkles, MoveRight, Lock, 
+  Globe, Send, ShieldCheck, Mail, MapPin, 
+  Plus, Minus, Info, MessageSquare, MousePointer2
 } from 'lucide-react';
 import Image from 'next/image';
 import { motion, AnimatePresence } from 'framer-motion';
 import { useRouter } from 'next/navigation';
 import CookieConsent from '@/components/CookieConsent';
-import FaqSection from '@/components/FaqSection';
 
-const STEPS = [
-  { id: "01", title: "Group Creation", desc: "Creează un grup pentru apartamentul tău și invită-ți colegii în câteva secunde." },
-  { id: "02", title: "Bill Input", desc: "Scanează factura cu AI. BeeFair extrage automat data, furnizorul și suma totală." },
-  { id: "03", title: "Item Selection", desc: "Alege cine a consumat ce. Ideal pentru cumpărături comune sau facturi complexe." },
-  { id: "04", title: "Funding Wallet", desc: "Fiecare își încarcă partea în portofelul digital folosind Apple/Google Pay." },
-  { id: "05", title: "Auto Payment", desc: "Factura se plătește singură cu cardul virtual BeeFair. Fără întârzieri." },
-];
+// --- TYPESCRIPT INTERFACES ---
+
+interface PremiumCardProps {
+  children: React.ReactNode;
+  className?: string;
+  gold?: boolean;
+}
+
+interface FAQItemProps {
+  question: string;
+  answer: string;
+  isOpen: boolean;
+  onClick: () => void;
+}
+
+interface SectionLabelProps {
+  icon: React.ReactNode;
+  label: string;
+}
+
+interface ContactInfoProps {
+  icon: React.ReactNode;
+  title: string;
+  value: string;
+}
+
+// --- BRAND COMPONENTS ---
+
+const PremiumCard = ({ children, className = "", gold = false }: PremiumCardProps) => (
+  <motion.div 
+    initial={{ opacity: 0, y: 30 }}
+    whileInView={{ opacity: 1, y: 0 }}
+    viewport={{ once: true }}
+    className={`relative group rounded-[48px] border transition-all duration-500 ${
+      gold 
+      ? "bg-gradient-to-br from-yellow-400/20 via-yellow-400/[0.03] to-transparent border-yellow-400/30 shadow-[0_20px_50px_rgba(250,204,21,0.1)]" 
+      : "bg-neutral-900/40 border-white/5 backdrop-blur-3xl shadow-2xl"
+    } ${className}`}
+  >
+    {gold && <div className="absolute -right-20 -top-20 w-80 h-80 bg-yellow-400/10 blur-[120px] rounded-full pointer-events-none" />}
+    <div className="relative z-10 h-full">{children}</div>
+  </motion.div>
+);
+
+const GoldText = ({ children }: { children: React.ReactNode }) => (
+  <span className="text-transparent bg-clip-text bg-gradient-to-b from-yellow-100 via-yellow-400 to-yellow-600">
+    {children}
+  </span>
+);
+
+const SectionLabel = ({ icon, label }: SectionLabelProps) => (
+  <div className="inline-flex items-center gap-3 px-4 py-2 rounded-full bg-black/20 border border-white/5 mb-8">
+    <span className="text-yellow-400">{icon}</span>
+    <span className="text-[10px] font-[1000] uppercase tracking-[0.3em] text-neutral-300">{label}</span>
+  </div>
+);
+
+const ContactInfo = ({ icon, title, value }: ContactInfoProps) => (
+  <div className="flex items-center gap-5 group">
+    <div className="w-12 h-12 rounded-2xl bg-white/5 flex items-center justify-center text-yellow-400 border border-white/5 group-hover:border-yellow-400/50 transition-all">
+      {icon}
+    </div>
+    <div>
+      <p className="text-[9px] font-black uppercase tracking-widest text-neutral-600 mb-0.5">{title}</p>
+      <p className="text-sm font-bold text-neutral-200">{value}</p>
+    </div>
+  </div>
+);
+
+const FAQItem = ({ question, answer, isOpen, onClick }: FAQItemProps) => (
+  <div className={`border-b border-white/5 last:border-none transition-all duration-500 ${isOpen ? 'bg-white/[0.02]' : ''}`}>
+    <button onClick={onClick} className="w-full py-8 px-8 flex items-center justify-between text-left group">
+      <span className={`text-lg md:text-xl font-bold transition-colors ${isOpen ? 'text-yellow-400' : 'text-white group-hover:text-yellow-200'}`}>
+        {question}
+      </span>
+      <div className={`flex-shrink-0 ml-4 transition-transform duration-500 ${isOpen ? 'rotate-180' : ''}`}>
+        {isOpen ? <Minus className="w-5 h-5 text-yellow-400" /> : <Plus className="w-5 h-5 text-neutral-600" />}
+      </div>
+    </button>
+    <AnimatePresence>
+      {isOpen && (
+        <motion.div initial={{ height: 0, opacity: 0 }} animate={{ height: "auto", opacity: 1 }} exit={{ height: 0, opacity: 0 }} className="overflow-hidden">
+          <div className="px-8 pb-8 text-neutral-400 leading-relaxed font-medium italic">{answer}</div>
+        </motion.div>
+      )}
+    </AnimatePresence>
+  </div>
+);
+
+// --- MAIN HOME PAGE ---
 
 export default function Home() {
-  const [email, setEmail] = useState('');
-  const [isSubmitting, setIsSubmitting] = useState(false);
   const [activeStep, setActiveStep] = useState(0);
-  const router = useRouter(); 
-  
-  // State pentru formularul de CONTACT
+  const [openFaq, setOpenFaq] = useState<number | null>(0);
+  const router = useRouter();
+
+  // State pentru Hero/Waitlist
+  const [email, setEmail] = useState('');
+  const [isSubmittingWaitlist, setIsSubmittingWaitlist] = useState(false);
+
+  // State pentru Formularul de Contact
   const [contactStatus, setContactStatus] = useState<'idle' | 'submitting' | 'success' | 'error'>('idle');
-  
+
+  const STEPS = [
+    { id: "01", title: "Hive Setup", desc: "Creezi grupul și inviți colegii cu un simplu link." },
+    { id: "02", title: "AI Extraction", desc: "Scanezi factura. Algoritmul înțelege totul instant." },
+    { id: "03", title: "Smart Split", desc: "Sistemul împarte costurile. Fără dubii, fără stres." },
+    { id: "04", title: "Instant Fill", desc: "Fiecare alimentează portofelul comun în secunde." },
+    { id: "05", title: "Auto Settle", desc: "Plata se face singură. Tu doar primești confirmarea." },
+  ];
+
+  const FAQS = [
+    { q: "Este sigur să îmi conectez datele?", a: "Absolut. BeeFair utilizează criptare bank-level pe 256 de biți și nu stochează niciodată datele tale bancare sensibile. Suntem conformi GDPR și lucrăm cu procesatori de plăți autorizați." },
+    { q: "Ce se întâmplă dacă un coleg nu plătește?", a: "Sistemul trimite notificări automate 'gentle buzz'. Te avertizăm din timp dacă fondurile nu sunt colectate pentru a evita penalitățile furnizorului." },
+    { q: "Există un comision de utilizare?", a: "BeeFair este transparent. Există un mic comision de administrare a stupului doar la plata facturilor, pentru a acoperi procesarea securizată." },
+    { q: "Pot scana orice fel de bon?", a: "Da! De la utilități la bonuri de supermarket. AI-ul extrage datele și împarte suma conform regulilor stabilite de voi." }
+  ];
+
+  // LOGICĂ FORMULAR WAITLIST (HERO)
+  const handleWaitlistSubmit = async (e: React.FormEvent) => {
+    e.preventDefault();
+    setIsSubmittingWaitlist(true);
+
+    try {
+      const response = await fetch("https://formspree.io/f/mreqbryb", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ email: email }),
+      });
+
+      if (response.ok) {
+        router.push('/thank-you');
+      } else {
+        alert("Ceva nu a mers. Mai încearcă o dată.");
+        setIsSubmittingWaitlist(false);
+      }
+    } catch (error) {
+      alert("Eroare de conexiune.");
+      setIsSubmittingWaitlist(false);
+    }
+  };
+
+  // LOGICĂ FORMULAR CONTACT (FOOTER SECTION)
   const handleContactSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
     setContactStatus('submitting');
@@ -54,336 +180,212 @@ export default function Home() {
     }
   };
 
-  const handleSubmit = async (e: React.FormEvent) => {
-    e.preventDefault(); 
-    setIsSubmitting(true);
-
-    try {
-      const response = await fetch("https://formspree.io/f/mreqbryb", {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-        },
-        body: JSON.stringify({ email: email }),
-      });
-
-      if (response.ok) {
-        router.push('/thank-you');
-      } else {
-        alert("Ceva nu a mers. Mai încearcă o dată.");
-        setIsSubmitting(false);
-      }
-    } catch (error) {
-      alert("Eroare de conexiune.");
-      setIsSubmitting(false);
-    }
-  };
-
   return (
-    <div className="min-h-screen bg-neutral-950 text-white font-sans selection:bg-yellow-500 selection:text-black">
+    <div className="min-h-screen bg-[#030303] text-white font-sans selection:bg-yellow-400 selection:text-black overflow-x-hidden">
       
-      {/* --- NAVBAR --- */}
-      <nav className="fixed top-0 w-full z-50 border-b border-white/10 bg-neutral-950/80 backdrop-blur-md">
-        <div className="max-w-6xl mx-auto px-6 h-16 flex items-center justify-between">
-          <div className="flex items-center">
-            <Image 
-              src="/img/logo_desktop.png" 
-              alt="BeeFair Logo"
-              priority
-              className="w-auto object-contain max-w-[200px]"
-            />
+      {/* --- NAVIGATION --- */}
+      <nav className="fixed top-6 w-full z-[100] px-6">
+        <div className="max-w-5xl mx-auto flex justify-between items-center bg-black/40 backdrop-blur-2xl border border-white/10 rounded-[32px] px-8 py-4 shadow-2xl">
+          <Image src="/img/logo_desktop.png" alt="BeeFair" width={130} height={35} className="w-auto h-7" priority />
+          <div className="hidden md:flex items-center gap-10">
+            <a href="#process" className="text-[10px] font-black uppercase tracking-[0.3em] text-neutral-400 hover:text-yellow-400 transition-all">Metoda</a>
+            <a href="#faq" className="text-[10px] font-black uppercase tracking-[0.3em] text-neutral-400 hover:text-yellow-400 transition-all">FAQ</a>
+            <a href="#contact" className="text-[10px] font-black uppercase tracking-[0.3em] text-neutral-400 hover:text-yellow-400 transition-all">Contact</a>
           </div>
-          {/* Am scos 'hidden md:block' ca sa apara si pe mobil butonul de contact */}
-          <a href="#contact" className="text-sm font-medium text-neutral-400 hover:text-yellow-400 transition-colors flex items-center gap-2">
-            <MessageSquare className="w-4 h-4" />
-            <span className="hidden sm:inline">Contact</span>
-          </a>
+          <button onClick={() => window.scrollTo({top: 0, behavior: 'smooth'})} className="bg-yellow-400 text-black px-6 py-2.5 rounded-2xl text-[10px] font-[1000] uppercase tracking-widest hover:scale-105 transition-all shadow-[0_10px_30px_rgba(250,204,21,0.2)]">
+            Join Waitlist
+          </button>
         </div>
       </nav>
 
-      {/* --- HERO SECTION --- */}
-      <section className="pt-28 md:pt-32 pb-12 md:pb-20 px-6 max-w-4xl mx-auto text-center">
-        <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-yellow-400/10 text-yellow-400 text-xs font-bold uppercase tracking-wider mb-6 border border-yellow-400/20">
-          <span className="w-2 h-2 rounded-full bg-yellow-400 animate-pulse"></span>
-          Coming Soon
-        </div>
-        
-        {/* Optimizare Text: text-4xl pe mobil, text-7xl pe desktop */}
-        <h1 className="text-4xl sm:text-5xl md:text-7xl font-extrabold tracking-tight mb-6 text-white leading-tight">
-          Gata cu certurile pe <br className="hidden md:block" />
-          <span className="text-transparent bg-clip-text bg-gradient-to-r from-yellow-300 to-yellow-500">
-            bani în apartament.
-          </span>
-        </h1>
-
-        <h2 className="text-xl md:text-3xl font-light text-neutral-300 mb-8 tracking-wide">
-          Smart living for <span className="text-yellow-400 font-normal italic">busy bees</span>
-        </h2>
-
-        <div id="join" className="max-w-md mx-auto relative mb-12">
-             <form onSubmit={handleSubmit} className="flex flex-col sm:flex-row gap-3">
+      {/* --- HERO --- */}
+      <section className="relative pt-64 pb-32 px-6">
+        <div className="absolute top-0 left-1/2 -translate-x-1/2 w-full h-[1000px] bg-yellow-400/[0.02] blur-[150px] rounded-full pointer-events-none -z-10" />
+        <div className="max-w-6xl mx-auto text-center">
+          <motion.div initial={{ opacity: 0, scale: 0.9 }} animate={{ opacity: 1, scale: 1 }} className="inline-flex items-center gap-3 px-5 py-2 rounded-full bg-white/5 border border-white/10 mb-12 backdrop-blur-md">
+            <Sparkles className="w-4 h-4 text-yellow-400" />
+            <span className="text-[10px] font-black uppercase tracking-[0.4em] text-yellow-100">Smart Shared Living</span>
+          </motion.div>
+          <h1 className="text-7xl md:text-[11rem] font-[1000] tracking-tight leading-[0.8] mb-12 italic">FAIR <br /><GoldText>LIVING.</GoldText></h1>
+          <p className="text-xl md:text-2xl text-neutral-400 max-w-2xl mx-auto mb-16 font-medium italic">Automatizăm tot ce ține de facturi la comun.</p>
+          
+          <div className="max-w-xl mx-auto p-2 bg-neutral-900/50 rounded-[36px] border border-white/10 backdrop-blur-xl shadow-2xl focus-within:border-yellow-400/50 transition-all">
+            <form onSubmit={handleWaitlistSubmit} className="flex flex-col sm:flex-row gap-2">
               <input 
                 type="email" 
-                name="email" 
+                required
                 value={email}
                 onChange={(e) => setEmail(e.target.value)}
-                placeholder="Adresa ta de email..." 
-                className="flex-1 bg-neutral-900 border border-white/10 text-white px-4 py-3 rounded-xl focus:outline-none focus:ring-2 focus:ring-yellow-400/50 placeholder:text-neutral-600 disabled:opacity-50"
-                required
-                disabled={isSubmitting}
+                placeholder="Email-ul tau..." 
+                className="flex-1 bg-transparent px-8 py-5 outline-none font-bold placeholder:text-neutral-600 disabled:opacity-50" 
+                disabled={isSubmittingWaitlist}
               />
               <button 
                 type="submit"
-                disabled={isSubmitting} 
-                className="bg-yellow-400 hover:bg-yellow-500 text-black font-bold px-6 py-3 rounded-xl transition-all flex items-center justify-center gap-2 group disabled:opacity-70 disabled:cursor-not-allowed"
+                disabled={isSubmittingWaitlist}
+                className="bg-yellow-400 text-black font-black px-10 py-5 rounded-[28px] uppercase text-xs tracking-widest hover:bg-yellow-500 transition-all disabled:opacity-70"
               >
-                {isSubmitting ? 'Se trimite...' : 'Intră în Stup'}
-                {!isSubmitting && <ChevronRight className="w-4 h-4 group-hover:translate-x-1 transition-transform" />}
+                {isSubmittingWaitlist ? 'Wait...' : 'Get Access'}
               </button>
             </form>
-            
-            <p className="text-neutral-600 text-xs mt-3">
-                <ShieldCheck className="w-3 h-3 inline mr-1" />
-                Nu trimitem spam. Doar update-uri importante.
-            </p>
+          </div>
+          <p className="text-neutral-600 text-[10px] mt-6 font-bold uppercase tracking-widest">
+            <ShieldCheck className="w-3 h-3 inline mr-1 text-yellow-400" />
+            Nu trimitem spam. Doar update-uri importante.
+          </p>
         </div>
-
-        {/* --- MOCKUP APLICATIE --- */}
-        <div className="mt-12 md:mt-20 relative w-full max-w-5xl mx-auto px-2 md:px-0">
-            <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[120%] h-[120%] bg-yellow-400/10 blur-[60px] md:blur-[80px] -z-10 rounded-full"></div>
-            
-            <Image 
-                src="/img/app-mockup.png" 
-                alt="BeeFair App Interface"
-                width={1200}
-                height={800}
-                priority
-                className="rounded-2xl md:rounded-3xl border border-white/10 shadow-2xl mx-auto w-full h-auto"
-            />
-        </div>
-
       </section>
 
-      {/* --- HOW IT WORKS --- */}
-      <section className="py-16 md:py-24 px-4">
-        <div className="max-w-5xl mx-auto bg-neutral-900/20 border border-white/5 rounded-[30px] md:rounded-[40px] p-6 md:p-16 backdrop-blur-sm relative overflow-hidden">
-          
-          <div className="flex items-center gap-4 mb-10 md:mb-16">
-            <h2 className="text-2xl md:text-3xl font-bold">How it Works</h2>
-            <div className="h-px flex-1 bg-gradient-to-r from-white/10 to-transparent" />
-          </div>
+      {/* --- TRUST BAND --- */}
+      <div className="py-10 border-y border-white/5 bg-white/[0.01]">
+        <div className="max-w-6xl mx-auto px-6 flex flex-wrap justify-center md:justify-between gap-8 opacity-40 grayscale hover:grayscale-0 transition-all duration-700">
+           <div className="flex items-center gap-3 text-[10px] font-black uppercase tracking-[0.3em]"><Lock className="w-4 h-4"/> 256-Bit Encrypted</div>
+           <div className="flex items-center gap-3 text-[10px] font-black uppercase tracking-[0.3em]"><ShieldCheck className="w-4 h-4"/> Bank-Level Security</div>
+           <div className="flex items-center gap-3 text-[10px] font-black uppercase tracking-[0.3em]"><Globe className="w-4 h-4"/> EU GDPR Compliant</div>
+        </div>
+      </div>
 
-          {/* Timeline - Scrollable pe mobil */}
-          <div className="relative mb-12 md:mb-24 overflow-x-auto no-scrollbar pt-4 pb-4">
-            <div className="flex justify-between min-w-[600px] md:min-w-full relative z-10 px-4">
-              {STEPS.map((step, index) => (
-                <button
-                  key={step.id}
-                  onClick={() => setActiveStep(index)}
-                  className="flex flex-col items-center group relative outline-none"
-                  style={{ width: '18%' }}
-                >
-                  <motion.span 
-                    animate={{ color: index === activeStep ? "#facc15" : "#404040" }}
-                    className="text-3xl md:text-5xl font-black mb-4 md:mb-6 transition-colors"
-                  >
-                    {step.id}
-                  </motion.span>
-                  <div className="relative flex items-center justify-center">
-                    <motion.div 
-                      animate={{ 
-                        scale: index === activeStep ? 1.2 : 1,
-                        backgroundColor: index <= activeStep ? "#facc15" : "#171717"
-                      }}
-                      className="w-3 h-3 md:w-4 md:h-4 rounded-full border-2 border-neutral-900 z-20"
-                    />
-                    {index === activeStep && (
-                      <motion.div layoutId="glow" className="absolute w-6 h-6 md:w-8 md:h-8 bg-yellow-400/20 blur-md rounded-full" />
-                    )}
+      {/* --- BENTO GRID --- */}
+      <section className="py-32 px-6 max-w-7xl mx-auto">
+        <div className="grid grid-cols-1 md:grid-cols-12 gap-6">
+          <PremiumCard gold className="md:col-span-8 p-12 min-h-[500px] flex flex-col justify-end">
+            <ScanLine className="w-20 h-20 text-yellow-400 mb-12" />
+            <h3 className="text-5xl font-black mb-6 leading-none italic uppercase">Snap & Scan</h3>
+            <p className="text-neutral-400 text-lg max-w-md italic font-medium leading-relaxed">Faci o poză la contor sau factură, iar AI-ul nostru extrage datele instant.</p>
+          </PremiumCard>
+          <div className="md:col-span-4 grid gap-6">
+            <PremiumCard className="p-10 flex flex-col justify-center text-center">
+              <CreditCard className="w-12 h-12 text-yellow-400 mx-auto mb-6" />
+              <h4 className="text-xl font-black uppercase tracking-tighter mb-2 italic">Fair Split</h4>
+              <p className="text-neutral-500 text-sm font-bold">Calculăm automat cine cât datorează, fără Excel-uri sau calcule manuale.</p>
+            </PremiumCard>
+            <PremiumCard className="p-10 flex flex-col justify-center text-center bg-white text-black border-none shadow-[0_0_50px_rgba(255,255,255,0.1)]">
+              <Zap className="w-12 h-12 mx-auto mb-6" />
+              <h4 className="text-xl font-black uppercase tracking-tighter mb-2 italic uppercase">The Sting</h4>
+              <p className="text-neutral-800 text-sm font-bold italic">Trimite un &apos;Sting&apos; anonim colegilor care uită să plătească, direct din app.</p>
+            </PremiumCard>
+          </div>
+        </div>
+      </section>
+
+      {/* --- LIQUID FLOW --- */}
+      <section id="process" className="py-32 px-6">
+        <div className="max-w-7xl mx-auto">
+          <h2 className="text-6xl md:text-8xl font-[1000] tracking-tighter italic mb-20">HOW WE <GoldText>BUZZ.</GoldText></h2>
+          <div className="flex flex-col md:flex-row gap-4">
+            {STEPS.map((step, idx) => (
+              <motion.div 
+                key={step.id}
+                onMouseEnter={() => setActiveStep(idx)}
+                className={`relative flex-1 p-12 rounded-[48px] border transition-all duration-700 cursor-pointer overflow-hidden ${
+                  activeStep === idx ? "bg-yellow-400 border-yellow-400 text-black flex-[2.5] shadow-2xl" : "bg-neutral-900/30 border-white/5 text-neutral-600"
+                }`}
+              >
+                <div className="flex flex-col h-full justify-between gap-12">
+                  <span className="text-7xl font-[1000] tracking-tighter opacity-20 italic">{step.id}</span>
+                  <div>
+                    <h4 className={`text-2xl font-black mb-4 uppercase italic ${activeStep === idx ? 'text-black' : 'text-white'}`}>{step.title}</h4>
+                    <p className={`text-sm font-bold ${activeStep === idx ? 'text-black/70' : 'text-neutral-600'}`}>{step.desc}</p>
                   </div>
-                  <span className={`mt-3 md:mt-4 text-[10px] font-bold uppercase tracking-widest transition-colors whitespace-nowrap ${index === activeStep ? 'text-white' : 'text-neutral-600'}`}>
-                    {step.title}
-                  </span>
-                </button>
+                </div>
+              </motion.div>
+            ))}
+          </div>
+        </div>
+      </section>
+
+      {/* --- FAQ SECTION --- */}
+      <section id="faq" className="py-32 px-6">
+        <div className="max-w-4xl mx-auto">
+          <div className="text-center mb-16">
+            <SectionLabel icon={<Info className="w-3 h-3"/>} label="Questions" />
+            <h2 className="text-5xl md:text-7xl font-[1000] tracking-tighter italic">KNOWLEDGE <GoldText>HIVE.</GoldText></h2>
+          </div>
+          <PremiumCard className="overflow-hidden border-white/10">
+            <div className="divide-y divide-white/5">
+              {FAQS.map((faq, index) => (
+                <FAQItem 
+                  key={index}
+                  question={faq.q}
+                  answer={faq.a}
+                  isOpen={openFaq === index}
+                  onClick={() => setOpenFaq(openFaq === index ? null : index)}
+                />
               ))}
             </div>
-            {/* Progress Lines */}
-            <div className="absolute top-[65px] md:top-[90px] left-0 w-full h-[1px] bg-white/5 -z-0" />
-            <motion.div 
-              className="absolute top-[65px] md:top-[90px] left-0 h-[1px] bg-yellow-400 shadow-[0_0_10px_rgba(250,204,21,0.4)] -z-0"
-              initial={{ width: "0%" }}
-              animate={{ width: `${(activeStep / (STEPS.length - 1)) * 100}%` }}
-              transition={{ type: "spring", stiffness: 50 }}
-            />
-          </div>
-
-          <div className="grid md:grid-cols-5 gap-6">
-            <div className="md:col-span-3">
-              <AnimatePresence mode="wait">
-                <motion.div
-                  key={activeStep}
-                  initial={{ opacity: 0, x: -10 }}
-                  animate={{ opacity: 1, x: 0 }}
-                  exit={{ opacity: 0, x: 10 }}
-                  className="bg-black/40 border border-white/5 p-6 md:p-8 rounded-3xl h-full flex flex-col justify-center"
-                >
-                  <div className="w-10 h-10 md:w-12 md:h-12 bg-yellow-400 rounded-xl flex items-center justify-center mb-4 md:mb-6 shadow-lg shadow-yellow-400/10">
-                    <MousePointer2 className="w-5 h-5 md:w-6 md:h-6 text-black" />
-                  </div>
-                  <h3 className="text-xl font-bold mb-4 md:hidden text-yellow-400">{STEPS[activeStep].title}</h3>
-                  <p className="text-base md:text-lg text-neutral-300 leading-relaxed font-medium italic">
-                    {STEPS[activeStep].desc}
-                  </p>
-                </motion.div>
-              </AnimatePresence>
-            </div>
-
-            <div className="md:col-span-2">
-              <div className="bg-yellow-400/5 border border-yellow-400/10 p-6 md:p-8 rounded-3xl h-full flex flex-col justify-center relative overflow-hidden group">
-                <div className="absolute -right-4 -top-4 w-24 h-24 bg-yellow-400/10 blur-2xl group-hover:bg-yellow-400/20 transition-all"></div>
-                <div className="flex gap-4 mb-4 items-center">
-                  <Info className="w-5 h-5 text-yellow-400" />
-                  <span className="text-xs font-bold uppercase tracking-widest text-yellow-400/60">Different</span>
-                </div>
-                <p className="text-neutral-300 italic text-sm leading-relaxed relative z-10">
-                  &quot;BeeFair elimină discuțiile inconfortabile. Grupul strânge banii în avans, iar plata se face dintr-un singur loc.&quot;
-                </p>
-              </div>
-            </div>
-          </div>
+          </PremiumCard>
         </div>
       </section>
 
-      {/* --- FEATURES GRID --- */}
-      <section className="py-12 md:py-20 px-6 max-w-6xl mx-auto">
-        <div className="grid md:grid-cols-3 gap-6 md:gap-8">
-          {[
-            { icon: ScanLine, title: "Snap & Scan", text: "Faci o poză la contor sau factură, iar AI-ul nostru extrage datele instant." },
-            { icon: Users, title: "Fair Split", text: "Calculăm automat cine cât datorează, fără Excel-uri sau calcule manuale." },
-            { icon: Zap, title: "The Sting", text: "Trimite un 'Sting' anonim colegilor care uită să plătească, direct din app." }
-          ].map((f, i) => (
-            <div key={i} className="p-6 md:p-10 rounded-3xl bg-neutral-900/40 border border-white/5 hover:border-yellow-400/20 transition-all group">
-              <f.icon className="w-8 h-8 md:w-10 md:h-10 text-yellow-400 mb-4 md:mb-8 group-hover:scale-110 transition-transform" />
-              <h3 className="text-lg md:text-xl font-bold mb-3 md:mb-4">{f.title}</h3>
-              <p className="text-neutral-500 leading-relaxed text-sm">{f.text}</p>
-            </div>
-          ))}
-        </div>
-      </section>
-
-      {/* --- GET IN TOUCH SECTION --- */}
-      <section id="contact" className="py-16 md:py-24 px-6 bg-neutral-900/50 border-t border-white/5">
+      {/* --- CONTACT SECTION --- */}
+      <section id="contact" className="py-40 px-6">
         <div className="max-w-6xl mx-auto">
-          
-          <div className="grid md:grid-cols-2 gap-10 md:gap-16 items-start">
-            
-            {/* Coloana Stânga: Info */}
-            <div>
-              <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-yellow-400/10 text-yellow-400 text-xs font-bold uppercase tracking-wider mb-6 border border-yellow-400/20">
-                <MessageSquare className="w-3 h-3" />
-                Support & Info
-              </div>
-              
-              <h2 className="text-3xl md:text-4xl font-bold mb-4 md:mb-6">Let's start a conversation.</h2>
-              <p className="text-neutral-400 text-base md:text-lg leading-relaxed mb-8 md:mb-10">
-                Ai întrebări despre cum funcționează BeeFair? Vrei să devenim parteneri sau doar să ne saluți? Suntem aici pentru tine.
-              </p>
-
-              <div className="space-y-6">
-                <div className="flex items-center gap-4 text-neutral-300">
-                  <div className="w-12 h-12 rounded-full bg-neutral-800 flex items-center justify-center text-yellow-400 shrink-0">
-                    <MapPin className="w-5 h-5" />
-                  </div>
-                  <div>
-                    <p className="text-xs text-neutral-500 uppercase tracking-wider font-bold">Locație</p>
-                    <p className="font-medium">Bacau, România</p>
-                  </div>
+          <PremiumCard className="overflow-hidden">
+            <div className="grid md:grid-cols-2">
+              <div className="p-12 md:p-20 bg-gradient-to-br from-yellow-400/20 to-transparent">
+                <SectionLabel icon={<Mail className="w-3 h-3"/>} label="Contact Us" />
+                <h2 className="text-5xl md:text-7xl font-[1000] tracking-tighter mb-8 italic leading-none">LET&apos;S <br/>CONNECT.</h2>
+                <div className="space-y-8 mt-12">
+                  <ContactInfo icon={<MapPin className="w-4 h-4"/>} title="Location" value="Bacau, Romania" />
+                  <ContactInfo icon={<Globe className="w-4 h-4"/>} title="Market" value="European Union" />
                 </div>
               </div>
+              <div className="p-12 md:p-20 bg-black/40 backdrop-blur-3xl border-l border-white/5">
+                {contactStatus === 'success' ? (
+                  <div className="h-full flex flex-col items-center justify-center text-center animate-in fade-in zoom-in">
+                    <CheckCircle2 className="w-20 h-20 text-green-400 mb-6" />
+                    <h3 className="text-3xl font-black italic">BUZZ RECEIVED!</h3>
+                    <p className="text-neutral-500 mt-4 text-sm font-bold uppercase tracking-widest">Te contactăm imediat.</p>
+                    <button onClick={() => setContactStatus('idle')} className="mt-8 text-yellow-400 text-[10px] font-black uppercase tracking-widest underline">Trimite alt mesaj</button>
+                  </div>
+                ) : (
+                  <form className="space-y-6" onSubmit={handleContactSubmit}>
+                    <div className="space-y-2">
+                        <label className="text-[10px] font-black uppercase tracking-widest text-neutral-500 ml-4 italic">Full Name</label>
+                        <input name="name" type="text" required placeholder="Alex Popescu" className="w-full bg-white/5 border border-white/10 p-5 rounded-[24px] outline-none focus:border-yellow-400 font-bold" />
+                    </div>
+                    <div className="space-y-2">
+                        <label className="text-[10px] font-black uppercase tracking-widest text-neutral-500 ml-4 italic">Email</label>
+                        <input name="email" type="email" required placeholder="alex@beefair.com" className="w-full bg-white/5 border border-white/10 p-5 rounded-[24px] outline-none focus:border-yellow-400 font-bold" />
+                    </div>
+                    <div className="space-y-2">
+                        <label className="text-[10px] font-black uppercase tracking-widest text-neutral-500 ml-4 italic">Message</label>
+                        <textarea name="message" rows={3} required placeholder="Cum te putem ajuta?" className="w-full bg-white/5 border border-white/10 p-5 rounded-[24px] outline-none focus:border-yellow-400 font-bold resize-none" />
+                    </div>
+                    <button 
+                      type="submit" 
+                      disabled={contactStatus === 'submitting'}
+                      className="w-full bg-white text-black font-black py-6 rounded-[24px] uppercase tracking-[0.4em] text-[10px] hover:bg-yellow-400 transition-all flex items-center justify-center gap-4 shadow-2xl disabled:opacity-50"
+                    >
+                      {contactStatus === 'submitting' ? 'Sending...' : 'Dispatch'} <Send className="w-4 h-4" />
+                    </button>
+                    {contactStatus === 'error' && <p className="text-red-500 text-[10px] font-bold text-center uppercase tracking-widest">Eroare de trimitere. Încearcă din nou.</p>}
+                  </form>
+                )}
+              </div>
             </div>
-
-            {/* Coloana Dreapta: Formular */}
-            <div className="bg-neutral-950 border border-white/10 p-6 md:p-8 rounded-3xl relative overflow-hidden">
-               <div className="absolute top-0 right-0 w-32 h-32 bg-yellow-400/10 blur-[50px] rounded-full -z-10"></div>
-
-              {contactStatus === 'success' ? (
-                <div className="h-[300px] flex flex-col items-center justify-center text-center animate-in fade-in zoom-in">
-                  <div className="w-16 h-16 bg-green-500/10 rounded-full flex items-center justify-center mb-4 border border-green-500/20">
-                    <CheckCircle2 className="w-8 h-8 text-green-400" />
-                  </div>
-                  <h3 className="text-xl font-bold text-white mb-2">Mesaj trimis!</h3>
-                  <p className="text-neutral-400">Îți vom răspunde cât de repede putem.</p>
-                  <button onClick={() => setContactStatus('idle')} className="mt-6 text-yellow-400 hover:text-yellow-300 text-sm font-medium">
-                    Trimite alt mesaj
-                  </button>
-                </div>
-              ) : (
-                <form onSubmit={handleContactSubmit} className="space-y-4">
-                  <div>
-                    <label htmlFor="name" className="block text-xs font-bold text-neutral-500 uppercase tracking-wider mb-2">Numele tău</label>
-                    <input 
-                      type="text" 
-                      name="name"
-                      required
-                      placeholder="Ex: Alex Popescu"
-                      className="w-full bg-neutral-900 border border-white/10 text-white px-4 py-3 rounded-xl focus:outline-none focus:ring-2 focus:ring-yellow-400/50 placeholder:text-neutral-700 transition-all text-base"
-                    />
-                  </div>
-
-                  <div>
-                    <label htmlFor="email_contact" className="block text-xs font-bold text-neutral-500 uppercase tracking-wider mb-2">Email</label>
-                    <input 
-                      type="email" 
-                      name="email"
-                      required
-                      placeholder="alex@email.com"
-                      className="w-full bg-neutral-900 border border-white/10 text-white px-4 py-3 rounded-xl focus:outline-none focus:ring-2 focus:ring-yellow-400/50 placeholder:text-neutral-700 transition-all text-base"
-                    />
-                  </div>
-
-                  <div>
-                    <label htmlFor="message" className="block text-xs font-bold text-neutral-500 uppercase tracking-wider mb-2">Mesaj</label>
-                    <textarea 
-                      name="message"
-                      required
-                      rows={4}
-                      placeholder="Salut! Aș vrea să știu dacă..."
-                      className="w-full bg-neutral-900 border border-white/10 text-white px-4 py-3 rounded-xl focus:outline-none focus:ring-2 focus:ring-yellow-400/50 placeholder:text-neutral-700 transition-all resize-none text-base"
-                    ></textarea>
-                  </div>
-
-                  <button 
-                    type="submit"
-                    disabled={contactStatus === 'submitting'}
-                    className="w-full bg-white hover:bg-neutral-200 text-black font-bold py-4 rounded-xl transition-all flex items-center justify-center gap-2 group disabled:opacity-70"
-                  >
-                    {contactStatus === 'submitting' ? 'Se trimite...' : 'Trimite Mesajul'}
-                    {!contactStatus.includes('submitting') && <Send className="w-4 h-4 group-hover:translate-x-1 transition-transform" />}
-                  </button>
-                  
-                  {contactStatus === 'error' && (
-                    <p className="text-red-400 text-sm text-center mt-2">A apărut o eroare. Încearcă din nou.</p>
-                  )}
-                </form>
-              )}
-            </div>
-
-          </div>
+          </PremiumCard>
         </div>
       </section>
-      <FaqSection />
 
       {/* --- FOOTER --- */}
-      <footer className="py-12 border-t border-white/5 text-center px-6 text-neutral-600 text-sm">
-        <p className="mb-4">&copy; {new Date().getFullYear()} BeeFair România. Smart living for busy bees 🐝</p>
-        <a href="/privacy" className="hover:text-neutral-400 underline decoration-neutral-800 underline-offset-4 transition-colors">
-          Politica de Confidențialitate
-        </a>
+      <footer className="py-20 border-t border-white/5 bg-[#010101]">
+        <div className="max-w-7xl mx-auto px-6 flex flex-col md:flex-row justify-between items-center gap-12 text-[10px] font-black uppercase tracking-[0.3em] text-neutral-800">
+          <Image src="/img/logo_desktop.png" alt="Logo" width={120} height={30} className="opacity-20 grayscale" />
+          <div className="flex gap-12 text-neutral-600 italic">
+             <a href="/privacy" className="hover:text-yellow-400 transition-colors">Privacy</a>
+             <a href="#" className="hover:text-yellow-400 transition-colors">Terms</a>
+             <a href="#" className="hover:text-yellow-400 transition-colors">Cookies</a>
+          </div>
+          <p className="italic">© {new Date().getFullYear()} BEEFAIR ROMANIA</p>
+        </div>
       </footer>
+      
       <CookieConsent />
+
       <style jsx global>{`
-        .no-scrollbar::-webkit-scrollbar { display: none; }
-        .no-scrollbar { -ms-overflow-style: none; scrollbar-width: none; }
+        @import url('https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:ital,wght@0,400;0,800;1,800&display=swap');
+        body { font-family: 'Plus Jakarta Sans', sans-serif; background-color: #030303; }
       `}</style>
     </div>
   );
