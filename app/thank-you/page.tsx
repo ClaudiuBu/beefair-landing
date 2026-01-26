@@ -1,6 +1,7 @@
 import Link from 'next/link';
 import { CheckCircle2, ArrowLeft, Instagram } from 'lucide-react';
 import Image from 'next/image';
+import CookieConsent from '@/components/CookieConsent';
 
 export default function ThankYou() {
   return (
@@ -54,6 +55,7 @@ export default function ThankYou() {
       <p className="mt-8 text-neutral-600 text-xs">
         &copy; 2026 BeeFair. Smart living.
       </p>
+      <CookieConsent />
     </div>
   );
 }

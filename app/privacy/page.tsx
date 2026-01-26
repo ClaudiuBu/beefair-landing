@@ -1,5 +1,6 @@
 import Link from 'next/link';
 import { ArrowLeft, Shield } from 'lucide-react';
+import CookieConsent from '@/components/CookieConsent';
 
 export default function PrivacyPolicy() {
   return (
@@ -67,6 +68,7 @@ export default function PrivacyPolicy() {
         </div>
 
       </div>
+      <CookieConsent />
     </div>
   );
 }

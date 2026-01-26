@@ -9,6 +9,7 @@ import {
 import Image from 'next/image';
 import { motion, AnimatePresence } from 'framer-motion';
 import { useRouter } from 'next/navigation';
+import CookieConsent from '@/components/CookieConsent';
 
 const STEPS = [
   { id: "01", title: "Group Creation", desc: "Creează un grup pentru apartamentul tău și invită-ți colegii în câteva secunde." },
@@ -377,7 +378,7 @@ export default function Home() {
           Politica de Confidențialitate
         </a>
       </footer>
-
+      <CookieConsent />
       <style jsx global>{`
         .no-scrollbar::-webkit-scrollbar { display: none; }
         .no-scrollbar { -ms-overflow-style: none; scrollbar-width: none; }
