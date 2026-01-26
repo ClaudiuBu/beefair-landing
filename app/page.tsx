@@ -88,7 +88,7 @@ export default function Home() {
               src="/img/logo_desktop.png" 
               alt="BeeFair Logo"
               priority
-              className="w-auto object-contain"
+              className="w-auto object-contain max-w-[200px]"
             />
           </div>
           {/* Am scos 'hidden md:block' ca sa apara si pe mobil butonul de contact */}
