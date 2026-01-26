@@ -292,9 +292,9 @@ export default function Home() {
 
               <div className="space-y-6">
                 <div className="flex items-center gap-4 text-neutral-300">
-                  <div className="w-12 h-12 rounded-full bg-neutral-800 flex items-center justify-center text-yellow-400">
+                  {/* <div className="w-12 h-12 rounded-full bg-neutral-800 flex items-center justify-center text-yellow-400">
                     <Mail className="w-5 h-5" />
-                  </div>
+                  </div> */}
                   {/* <div>
                     <p className="text-xs text-neutral-500 uppercase tracking-wider font-bold">Email</p>
                     <a href="mailto:hello@beefair.ro" className="hover:text-yellow-400 transition-colors font-medium">hello@beefair.ro</a>
