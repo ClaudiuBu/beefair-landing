@@ -247,6 +247,11 @@ export default function Home() {
       {/* --- FOOTER --- */}
       <footer className="py-12 border-t border-white/5 text-center px-6 text-neutral-600 text-sm">
         <p>&copy; {new Date().getFullYear()} BeeFair România. Smart living for busy bees 🐝</p>
+
+        <a href="/privacy" className="hover:text-neutral-400 underline decoration-neutral-800 underline-offset-4 transition-colors">
+          Politica de Confidențialitate
+        </a>
+
       </footer>
 
       <style jsx global>{`
