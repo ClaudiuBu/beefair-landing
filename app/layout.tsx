@@ -16,6 +16,16 @@ const geistMono = Geist_Mono({
 export const metadata: Metadata = {
   title: "BeeFair - Smart Living for Busy Bees",
   description: "Gata cu certurile pe bani. Scanează facturile și împarte cheltuielile automat.",
+  metadataBase: new URL('https://beefair.ro'),
+  keywords: ["facturi", "studenti", "chirie", "split bill", "romania"],
+  openGraph: {
+    title: "BeeFair - Smart Living",
+    description: "Aplicația care te scapă de certurile din cauza banilor în casă.",
+    url: 'https://beefair.ro',
+    siteName: 'BeeFair',
+    locale: 'ro_RO',
+    type: 'website',
+  },
 };
 export default function RootLayout({
   children,
