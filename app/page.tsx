@@ -10,6 +10,7 @@ import Image from 'next/image';
 import { motion, AnimatePresence } from 'framer-motion';
 import { useRouter } from 'next/navigation';
 import CookieConsent from '@/components/CookieConsent';
+import FaqSection from '@/components/FaqSection';
 
 const STEPS = [
   { id: "01", title: "Group Creation", desc: "Creează un grup pentru apartamentul tău și invită-ți colegii în câteva secunde." },
@@ -370,6 +371,7 @@ export default function Home() {
           </div>
         </div>
       </section>
+      <FaqSection />
 
       {/* --- FOOTER --- */}
       <footer className="py-12 border-t border-white/5 text-center px-6 text-neutral-600 text-sm">
