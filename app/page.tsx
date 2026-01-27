@@ -12,6 +12,7 @@ import { motion, AnimatePresence } from 'framer-motion';
 import { useRouter } from 'next/navigation';
 import CookieConsent from '@/components/CookieConsent';
 import StingGenerator from '@/components/StingGenerator';
+import LiveHiveFeed from '@/components/LiveHiveFeed';
 
 // --- TYPESCRIPT INTERFACES ---
 
@@ -245,6 +246,16 @@ export default function Home() {
           <p className="text-neutral-400 mt-4 italic">Testează generatorul nostru de &apos;Sting&apos; direct aici!</p>
         </div>
         <StingGenerator />
+      </section>
+      
+      {/* --- HIVE FEED --- */}
+      <section className="py-32 px-6 bg-black/30">
+        <div className="max-w-4xl mx-auto text-center mb-16">
+          <SectionLabel icon={<Info className="w-3 h-3"/>} label="Live Hive Feed" />
+          <h2 className="text-5xl md:text-7xl font-[1000] tracking-tighter italic">LIVE HIVE FEED</h2>
+          <p className="text-neutral-400 mt-4 italic">Vezi activitatea în timp real a grupului tău!</p>
+        </div>
+        <LiveHiveFeed />
       </section>
 
       {/* --- TRUST BAND --- */}
