@@ -188,7 +188,7 @@ export default function Home() {
       {/* --- NAVIGATION --- */}
       <nav className="fixed top-6 w-full z-[100] px-6">
         <div className="max-w-5xl mx-auto flex justify-between items-center bg-black/40 backdrop-blur-2xl border border-white/10 rounded-[32px] px-8 py-4 shadow-2xl">
-          <Image src="/img/logo_desktop.png" alt="BeeFair" height={75} className="w-auto" priority />
+          <Image src="/img/logo_desktop.png" alt="BeeFair" height={75} className="w-auto" priority style={{ maxHeight: '75px' }} />
           <div className="hidden md:flex items-center gap-10">
             <a href="#process" className="text-[10px] font-black uppercase tracking-[0.3em] text-neutral-400 hover:text-yellow-400 transition-all">Metoda</a>
             <a href="#faq" className="text-[10px] font-black uppercase tracking-[0.3em] text-neutral-400 hover:text-yellow-400 transition-all">FAQ</a>
