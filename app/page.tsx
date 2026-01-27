@@ -12,7 +12,7 @@ import { motion, AnimatePresence } from 'framer-motion';
 import { useRouter } from 'next/navigation';
 import CookieConsent from '@/components/CookieConsent';
 import StingGenerator from '@/components/StingGenerator';
-import LiveHiveFeed from '@/components/LiveHiveFeed';
+import Hero from '@/components/Hero';
 
 // --- TYPESCRIPT INTERFACES ---
 
@@ -201,42 +201,7 @@ export default function Home() {
       </nav>
 
       {/* --- HERO --- */}
-      <section className="relative pt-64 pb-32 px-6">
-        <div className="absolute top-0 left-1/2 -translate-x-1/2 w-full h-[1000px] bg-yellow-400/[0.02] blur-[150px] rounded-full pointer-events-none -z-10" />
-        <div className="max-w-6xl mx-auto text-center">
-          <motion.div initial={{ opacity: 0, scale: 0.9 }} animate={{ opacity: 1, scale: 1 }} className="inline-flex items-center gap-3 px-5 py-2 rounded-full bg-white/5 border border-white/10 mb-12 backdrop-blur-md">
-            <Sparkles className="w-4 h-4 text-yellow-400" />
-            <span className="text-[10px] font-black uppercase tracking-[0.4em] text-yellow-100">Smart Shared Living</span>
-          </motion.div>
-          <h1 className="text-7xl md:text-[11rem] font-[1000] tracking-tight leading-[0.8] mb-12 italic">FAIR <br /><GoldText>LIVING.</GoldText></h1>
-          <p className="text-xl md:text-2xl text-neutral-400 max-w-2xl mx-auto mb-16 font-medium italic">Automatizăm tot ce ține de facturi la comun.</p>
-          
-          <div className="max-w-xl mx-auto p-2 bg-neutral-900/50 rounded-[36px] border border-white/10 backdrop-blur-xl shadow-2xl focus-within:border-yellow-400/50 transition-all">
-            <form onSubmit={handleWaitlistSubmit} className="flex flex-col sm:flex-row gap-2">
-              <input 
-                type="email" 
-                required
-                value={email}
-                onChange={(e) => setEmail(e.target.value)}
-                placeholder="Email-ul tau..." 
-                className="flex-1 bg-transparent px-8 py-5 outline-none font-bold placeholder:text-neutral-600 disabled:opacity-50" 
-                disabled={isSubmittingWaitlist}
-              />
-              <button 
-                type="submit"
-                disabled={isSubmittingWaitlist}
-                className="bg-yellow-400 text-black font-black px-10 py-5 rounded-[28px] uppercase text-xs tracking-widest hover:bg-yellow-500 transition-all disabled:opacity-70"
-              >
-                {isSubmittingWaitlist ? 'Wait...' : 'Get Access'}
-              </button>
-            </form>
-          </div>
-          <p className="text-neutral-600 text-[10px] mt-6 font-bold uppercase tracking-widest">
-            <ShieldCheck className="w-3 h-3 inline mr-1 text-yellow-400" />
-            Nu trimitem spam. Doar update-uri importante.
-          </p>
-        </div>
-      </section>
+      <Hero />
 
       {/* --- STING GENERATOR SECTION --- */}
       <section className="py-32 px-6 bg-black/30">
@@ -248,15 +213,7 @@ export default function Home() {
         <StingGenerator />
       </section>
       
-      {/* --- HIVE FEED --- */}
-      <section className="py-32 px-6 bg-black/30">
-        <div className="max-w-4xl mx-auto text-center mb-16">
-          <SectionLabel icon={<Info className="w-3 h-3"/>} label="Live Hive Feed" />
-          <h2 className="text-5xl md:text-7xl font-[1000] tracking-tighter italic">LIVE HIVE FEED</h2>
-          <p className="text-neutral-400 mt-4 italic">Vezi activitatea în timp real a grupului tău!</p>
-        </div>
-        <LiveHiveFeed />
-      </section>
+   
 
       {/* --- TRUST BAND --- */}
       <div className="py-10 border-y border-white/5 bg-white/[0.01]">
