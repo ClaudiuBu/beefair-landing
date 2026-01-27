@@ -2,15 +2,16 @@
 
 import React, { useState } from 'react';
 import { 
-  ScanLine, Zap, Users, ChevronRight, CheckCircle2, 
-  CreditCard, Sparkles, MoveRight, Lock, 
+  ScanLine, Zap, CheckCircle2, 
+  CreditCard, Sparkles, Lock, 
   Globe, Send, ShieldCheck, Mail, MapPin, 
-  Plus, Minus, Info, MessageSquare, MousePointer2
+  Plus, Minus, Info
 } from 'lucide-react';
 import Image from 'next/image';
 import { motion, AnimatePresence } from 'framer-motion';
 import { useRouter } from 'next/navigation';
 import CookieConsent from '@/components/CookieConsent';
+import StingGenerator from '@/components/StingGenerator';
 
 // --- TYPESCRIPT INTERFACES ---
 
@@ -234,6 +235,16 @@ export default function Home() {
             Nu trimitem spam. Doar update-uri importante.
           </p>
         </div>
+      </section>
+
+      {/* --- STING GENERATOR SECTION --- */}
+      <section className="py-32 px-6 bg-black/30">
+        <div className="max-w-4xl mx-auto text-center mb-16">
+          <SectionLabel icon={<Info className="w-3 h-3"/>} label="Try It Out" />
+          <h2 className="text-5xl md:text-7xl font-[1000] tracking-tighter italic">GENERATE YOUR <GoldText>FIRST STING.</GoldText></h2>
+          <p className="text-neutral-400 mt-4 italic">Testează generatorul nostru de &apos;Sting&apos; direct aici!</p>
+        </div>
+        <StingGenerator />
       </section>
 
       {/* --- TRUST BAND --- */}
