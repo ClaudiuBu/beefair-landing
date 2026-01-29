@@ -78,7 +78,6 @@ const HeroAppMockup = () => {
 
         <div className="py-4">
           <p className="text-[10px] font-black text-gray-500 uppercase tracking-widest mb-1">Public</p>
-          <h2 className="text-2xl font-black text-white flex items-center gap-2">Feed principal 🌍</h2>
         </div>
       </div>
 
