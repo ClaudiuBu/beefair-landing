@@ -102,50 +102,39 @@ export default function Hero() {
                className="relative z-10 perspective-1000" // Adăugăm perspectivă
             >
             
-            {/* Container principal - am scos orice fundal sau bordură de grup */}
-<div className="relative flex items-center justify-center lg:justify-end w-full min-h-[700px]">
+      {/* Container cu perspectivă - ESENȚIAL pentru ca rotația să arate natural */}
+<div className="relative flex items-center justify-center lg:justify-end w-full min-h-[700px]" style={{ perspective: '1200px' }}>
     
-    {/* 1. Aura de lumină (Glow) - ACEASTA definește forma, nu o cutie */}
-    <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[500px] h-[700px] bg-[#F7E01C] opacity-[0.08] blur-[120px] rounded-full pointer-events-none"></div>
+    {/* Aura de lumină subtilă în spate */}
+    <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[500px] h-[700px] bg-[#F7E01C] opacity-[0.06] blur-[120px] rounded-full pointer-events-none"></div>
 
-    {/* 2. Containerul 3D - FĂRĂ fundal propriu (transparent) */}
+    {/* Telefonul cu înclinația ta preferată */}
     <div 
-        className="relative z-10 transform lg:rotate-y-[-18deg] lg:rotate-x-[8deg] transition-all duration-1000 ease-out hover:rotate-0 hover:scale-105"
+        className="relative z-10 transform lg:rotate-y-[-12deg] lg:rotate-x-[5deg] lg:translate-x-8 transition-all duration-700 ease-out hover:rotate-0 hover:translate-x-0"
         style={{ transformStyle: 'preserve-3d' }}
     >
-        {/* 3. Telefonul "Frameless" */}
-        <div className="relative rounded-[3.5rem] p-[2px] bg-gradient-to-b from-white/20 to-transparent shadow-[0_0_100px_rgba(0,0,0,0.8)]">
+        {/* Bordura fină tip sticlă */}
+        <div className="relative rounded-[3.2rem] p-[1.5px] bg-gradient-to-b from-white/20 via-transparent to-transparent shadow-2xl">
             
-            {/* Ecranul propriu-zis */}
-            <div className="rounded-[3.4rem] bg-black overflow-hidden shadow-2xl relative">
+            {/* Ecranul principal */}
+            <div className="rounded-[3.1rem] bg-black overflow-hidden relative shadow-[0_0_50px_rgba(0,0,0,0.8)]">
                 
-                {/* Reflexie de sticlă cinematică */}
+                {/* Reflexie cinematică peste sticlă */}
                 <div className="absolute inset-0 bg-gradient-to-tr from-white/5 via-transparent to-transparent z-40 pointer-events-none"></div>
 
-                {/* Componenta ta cu Feed-ul (fără ramă proprie) */}
-                <div className="w-[320px] h-[650px]">
+                {/* Componenta ta de Feed (curată, fără alte margini) */}
+                <div className="w-[310px] h-[620px]">
                     <LiveFeedMockup />
                 </div>
             </div>
 
-            {/* Notch-ul - acum pare că plutește pe sticlă */}
+            {/* Notch-ul integrat în sticlă */}
             <div className="absolute top-0 inset-x-0 h-6 bg-black w-28 mx-auto rounded-b-2xl z-50 border-x border-b border-white/5"></div>
         </div>
 
-        {/* 4. Badge-ul LIVE - singurul care "rupe" silueta */}
-        <div className="absolute -top-10 -right-12 bg-yellow-400 text-black font-black text-[11px] px-5 py-2.5 rounded-full shadow-[0_15px_40px_rgba(247,224,28,0.3)] transform rotate-12 border-2 border-black tracking-widest animate-bounce-slow">
+        {/* Badge-ul LIVE - singurul element care sparge silueta */}
+        <div className="absolute -top-6 -right-8 bg-yellow-400 text-black font-black text-[10px] px-4 py-2 rounded-full shadow-xl transform rotate-12 border-2 border-black animate-bounce-slow">
             LIVE HIVE 🔴
-        </div>
-
-        {/* 5. Element decorativ plutitor (Floating Card) */}
-        <div className="absolute -bottom-8 -left-16 bg-white/5 backdrop-blur-md border border-white/10 p-4 rounded-2xl shadow-2xl transform -rotate-6 z-50">
-           <div className="flex items-center gap-3">
-              <div className="w-8 h-8 rounded-full bg-yellow-400 flex items-center justify-center text-black font-bold">👑</div>
-              <div>
-                <p className="text-[10px] text-gray-400 font-bold uppercase tracking-tighter">Current Queen</p>
-                <p className="text-white text-xs font-black">Andrei (120 RON)</p>
-              </div>
-           </div>
         </div>
     </div>
 </div>
