@@ -101,43 +101,40 @@ export default function Hero() {
                transition={{ delay: 0.3, duration: 0.8 }}
                className="relative z-10 perspective-1000" // Adăugăm perspectivă
             >
-            
-      {/* Container cu perspectivă - ESENȚIAL pentru ca rotația să arate natural */}
-<div className="relative flex items-center justify-center lg:justify-end w-full min-h-[700px]" style={{ perspective: '1200px' }}>
+              {/* Container cu perspectivă pentru realism 3D */}
+  {/* Container principal fără "cutia" greoaie */}
+  <div className="relative group" style={{ perspective: '1200px' }}>
     
-    {/* Aura de lumină subtilă în spate */}
-    <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[500px] h-[700px] bg-[#F7E01C] opacity-[0.06] blur-[120px] rounded-full pointer-events-none"></div>
+    {/* Glow-ul din spate - acum e baza formei, nu rama */}
+    <div className="absolute -inset-4 bg-gradient-to-tr from-yellow-400/20 via-transparent to-yellow-400/10 blur-3xl opacity-50 group-hover:opacity-80 transition-opacity duration-700"></div>
 
-    {/* Telefonul cu înclinația ta preferată */}
-    <div 
-        className="relative z-10 transform lg:rotate-y-[-12deg] lg:rotate-x-[5deg] lg:translate-x-8 transition-all duration-700 ease-out hover:rotate-0 hover:translate-x-0"
-        style={{ transformStyle: 'preserve-3d' }}
+    <motion.div 
+      className="relative transform lg:rotate-y-[-12deg] lg:rotate-x-[5deg] transition-all duration-700 ease-out group-hover:rotate-0"
+      style={{ transformStyle: 'preserve-3d' }}
     >
-        {/* Bordura fină tip sticlă */}
-        <div className="relative rounded-[3.2rem] p-[1.5px] bg-gradient-to-b from-white/20 via-transparent to-transparent shadow-2xl">
-            
-            {/* Ecranul principal */}
-            <div className="rounded-[3.1rem] bg-black overflow-hidden relative shadow-[0_0_50px_rgba(0,0,0,0.8)]">
-                
-                {/* Reflexie cinematică peste sticlă */}
-                <div className="absolute inset-0 bg-gradient-to-tr from-white/5 via-transparent to-transparent z-40 pointer-events-none"></div>
+      {/* Rama "invizibilă" - doar o linie fină de lumină */}
+      <div className="relative rounded-[3rem] p-[1px] bg-gradient-to-b from-white/20 to-transparent shadow-[0_0_80px_-20px_rgba(247,224,28,0.3)]">
+        
+        <div className="rounded-[2.9rem] bg-black overflow-hidden relative">
+          {/* Notch-ul - acum e parte din sticlă, nu din ramă */}
+          <div className="absolute top-0 inset-x-0 h-6 bg-black w-28 mx-auto rounded-b-2xl z-50 border-x border-b border-white/5"></div>
+          
+          {/* Efect de reflexie pe "sticlă" care nu se mișcă cu scroll-ul */}
+          <div className="absolute inset-0 bg-gradient-to-tr from-white/10 via-transparent to-transparent pointer-events-none z-40 opacity-50"></div>
 
-                {/* Componenta ta de Feed (curată, fără alte margini) */}
-                <div className="w-[310px] h-[620px]">
-                    <LiveFeedMockup />
-                </div>
-            </div>
-
-            {/* Notch-ul integrat în sticlă */}
-            <div className="absolute top-0 inset-x-0 h-6 bg-black w-28 mx-auto rounded-b-2xl z-50 border-x border-b border-white/5"></div>
+          {/* Componenta ta de Feed */}
+          <div className="h-[620px] w-[310px]">
+            <LiveFeedMockup /> 
+          </div>
         </div>
+      </div>
 
-        {/* Badge-ul LIVE - singurul element care sparge silueta */}
-        <div className="absolute -top-6 -right-8 bg-yellow-400 text-black font-black text-[10px] px-4 py-2 rounded-full shadow-xl transform rotate-12 border-2 border-black animate-bounce-slow">
-            LIVE HIVE 🔴
-        </div>
-    </div>
-</div>
+      {/* Badge-ul LIVE - acum e singurul element cu "greutate" vizuală */}
+      <div className="absolute -top-6 -right-10 bg-yellow-400 text-black font-black text-[10px] px-5 py-2 rounded-full shadow-[0_10px_30px_rgba(247,224,28,0.4)] transform rotate-12 border-2 border-black">
+        LIVE HIVE 🐝
+      </div>
+    </motion.div>
+  </div>
             </motion.div>
           </div>
 
