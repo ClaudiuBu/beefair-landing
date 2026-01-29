@@ -115,11 +115,13 @@ export default function Hero() {
       style={{ transformStyle: 'preserve-3d' }}
     >
           {/* Componenta ta de Feed */}
-          <div className="h-[640px] w-[320px] relative rounded-[2.9rem] bg-black overflow-hidden relative relative rounded-[3rem] p-[1px] bg-gradient-to-b from-white/20 to-transparent shadow-[0_0_80px_-20px_rgba(247,224,28,0.3)]">
-                {/* Badge-ul LIVE - acum e singurul element cu "greutate" vizuală */}
-                <div className="absolute -top-6 -right-10 bg-yellow-400 text-black font-black text-[10px] px-5 py-2 rounded-full shadow-[0_10px_30px_rgba(247,224,28,0.4)] transform rotate-12 border-2 border-black">
+                    {/* Badge-ul LIVE - acum e singurul element cu "greutate" vizuală */}
+          <div className="h-[640px] w-[320px] relative">
+              <div className="absolute -top-6 -right-10 bg-yellow-400 text-black font-black text-[10px] px-5 py-2 rounded-full shadow-[0_10px_30px_rgba(247,224,28,0.4)] transform rotate-12 border-2 border-black">
                   LIVE HIVE 🐝
               </div>
+          </div>
+          <div className="h-[640px] w-[320px] relative rounded-[2.9rem] bg-black overflow-hidden relative relative rounded-[3rem] p-[1px] bg-gradient-to-b from-white/20 to-transparent shadow-[0_0_80px_-20px_rgba(247,224,28,0.3)]">
             {/* Efect de reflexie pe "sticlă" care nu se mișcă cu scroll-ul */}
               <div className="absolute inset-0 bg-gradient-to-tr from-white/10 via-transparent to-transparent pointer-events-none z-40 opacity-50"></div>
                 <LiveFeedMockup /> 
