@@ -203,17 +203,55 @@ export default function Home() {
 
       {/* --- HERO --- */}
       <Hero />
+{/* --- STING GENERATOR SECTION --- */}
+<section className="py-32 px-6 bg-black/30 overflow-hidden">
+  <div className="max-w-7xl mx-auto">
+    <div className="text-center mb-20">
+      <SectionLabel icon={<Info className="w-3 h-3"/>} label="Interactive Lab" />
+      <h2 className="text-5xl md:text-7xl font-[1000] tracking-tighter italic uppercase">
+        Generate your <GoldText>First Sting.</GoldText>
+      </h2>
+      <p className="text-neutral-400 mt-4 italic text-lg">
+        Creează o înțepătură și vezi cum explodează feed-ul în timp real.
+      </p>
+    </div>
 
-      {/* --- STING GENERATOR SECTION --- */}
-      <section className="py-32 px-6 bg-black/30">
-        <div className="max-w-4xl mx-auto text-center mb-16">
-          <SectionLabel icon={<Info className="w-3 h-3"/>} label="Try It Out" />
-          <h2 className="text-5xl md:text-7xl font-[1000] tracking-tighter italic">GENERATE YOUR <GoldText>FIRST STING.</GoldText></h2>
-          <p className="text-neutral-400 mt-4 italic">Testează generatorul nostru de &apos;Sting&apos; direct aici!</p>
+    {/* Layout pe două coloane pentru Desktop */}
+    <div className="grid lg:grid-cols-2 gap-16 items-center">
+      
+      {/* COLOANA 1: Generatorul (Interacțiunea) */}
+      <div className="z-10">
+        <StingGenerator />
+      </div>
+
+      {/* COLOANA 2: Rezultatul (Vizualul 3D) */}
+      <div className="relative">
+        <div 
+          className="transform lg:rotate-y-[-15deg] lg:rotate-x-[8deg] transition-all duration-700 hover:rotate-0"
+          style={{ transformStyle: 'preserve-3d' }}
+        >
+          {/* Glow spatele feed-ului */}
+          <div className="absolute inset-0 bg-yellow-400 blur-[100px] opacity-10 rounded-full -z-10"></div>
+          
+          {/* Mockup-ul */}
+          <div className="bg-neutral-950/50 border border-white/10 p-2 rounded-[3rem] shadow-2xl backdrop-blur-xl ring-1 ring-white/10">
+            <div className="rounded-[2.5rem] overflow-hidden bg-black h-[500px]">
+               <LiveFeedMockup />
+            </div>
+          </div>
+
+          {/* Badge plutitor */}
+          <div className="absolute -top-6 -right-6 bg-yellow-400 text-black font-black text-[10px] px-4 py-2 rounded-full shadow-lg transform rotate-12 border-2 border-black animate-bounce-slow">
+              LIVE PREVIEW 🔴
+          </div>
         </div>
-        {/* <StingGenerator /> */}
-        <LiveFeedMockup />
-      </section>
+      </div>
+    </div>
+  </div>
+</section>
+
+
+      
       
    
 

@@ -24,3 +24,11 @@ body {
   color: var(--foreground);
   font-family: Arial, Helvetica, sans-serif;
 }
+@keyframes bounce-slow {
+  0%, 100% { transform: translateY(0) rotate(12deg); }
+  50% { transform: translateY(-10px) rotate(12deg); }
+}
+
+.animate-bounce-slow {
+  animation: bounce-slow 3s ease-in-out infinite;
+}

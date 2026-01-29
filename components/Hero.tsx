@@ -4,6 +4,7 @@ import React, { useState } from 'react';
 import { motion } from 'framer-motion';
 import { Sparkles, ShieldCheck } from 'lucide-react'; // Presupun că folosești lucide-react
 import LiveHiveFeed from './LiveHiveFeed'; // Importăm componenta făcută anterior
+import LiveFeedMockup from './LiveFeedMockup'; // Importăm componenta LiveFeedMockup
 
 // O mică componentă helper pentru textul auriu
 const GoldText = ({ children }: { children: React.ReactNode }) => (
@@ -100,25 +101,41 @@ export default function Hero() {
                transition={{ delay: 0.3, duration: 0.8 }}
                className="relative z-10 perspective-1000" // Adăugăm perspectivă
             >
-                {/* Container rotit ușor */}
-                <div 
-                    className="transform lg:rotate-y-[-12deg] lg:rotate-x-[5deg] lg:translate-x-8 transition-transform hover:rotate-0 duration-500"
-                    style={{ transformStyle: 'preserve-3d' }}
-                >
-                    {/* Glow spatele feed-ului */}
-                    <div className="absolute inset-0 bg-[#F7E01C] blur-[60px] opacity-20 rounded-full -z-10"></div>
-                    
-                    {/* Widget-ul efectiv */}
-                    <div className="bg-neutral-950/80 border border-white/10 p-6 rounded-[2.5rem] shadow-2xl backdrop-blur-xl">
-                         {/* Aici integrăm componenta făcută anterior */}
-                         <LiveHiveFeed />
-                    </div>
+              {/* Container cu perspectivă pentru realism 3D */}
+<div className="relative group" style={{ perspective: '1000px' }}>
+    
+    {/* Container rotit - am adăugat profunzime și umbre dinamice */}
+    <div 
+        className="relative transform lg:rotate-y-[-12deg] lg:rotate-x-[5deg] lg:translate-x-8 transition-all duration-700 ease-out group-hover:rotate-0 group-hover:translate-x-0"
+        style={{ transformStyle: 'preserve-3d' }}
+    >
+        {/* Glow-ul din spate - acum este mai dinamic și "pulsează" */}
+        <div className="absolute inset-0 bg-yellow-400 blur-[80px] opacity-20 rounded-full -z-10 animate-pulse"></div>
+        
+        {/* "Carcasa" widget-ului - am adăugat un gradient fin pe border */}
+        <div className="bg-neutral-900/90 border border-white/10 p-1 rounded-[3rem] shadow-[0_50px_100px_-20px_rgba(0,0,0,0.5)] backdrop-blur-2xl ring-1 ring-white/20">
+             
+             {/* Componenta de Feed încapsulată într-un container care simulează ecranul */}
+             <div className="overflow-hidden rounded-[2.5rem] bg-black relative">
+                {/* Reflexie tip "glass" peste ecran */}
+                <div className="absolute inset-0 bg-gradient-to-tr from-white/5 to-transparent pointer-events-none z-30"></div>
+                
+                {/* Aici integrăm componenta de scroll infinit */}
+                <LiveFeedMockup />
+             </div>
+        </div>
 
-                    {/* Badge plutitor decorativ */}
-                    <div className="absolute -top-6 -right-6 bg-white text-black font-black text-xs px-4 py-2 rounded-full shadow-lg transform rotate-12 border-2 border-[#F7E01C]">
-                        LIVE ACTIVITY 🔴
-                    </div>
-                </div>
+        {/* Badge-ul plutitor - acum are o mică animație de "floating" */}
+        <div className="absolute -top-8 -right-8 bg-yellow-400 text-black font-black text-[10px] tracking-widest px-4 py-2 rounded-full shadow-2xl transform rotate-12 border-2 border-black animate-bounce-slow">
+            LIVE HIVE ACTIVITY 🐝
+        </div>
+
+        {/* Al doilea badge decorativ pentru extra-detaliu în stânga jos */}
+        <div className="absolute -bottom-6 -left-10 bg-zinc-800 text-white text-[10px] px-3 py-1.5 rounded-lg shadow-xl border border-white/10 opacity-0 group-hover:opacity-100 transition-opacity duration-500">
+            + 12.4k transactions today
+        </div>
+    </div>
+</div>
             </motion.div>
           </div>
 
