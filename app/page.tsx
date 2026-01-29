@@ -14,6 +14,7 @@ import CookieConsent from '@/components/CookieConsent';
 import StingGenerator from '@/components/StingGenerator';
 import  LiveFeedMockup  from '@/components/LiveFeedMockup';
 import Hero from '@/components/Hero';
+import LiveHiveFeed from '@/components/LiveHiveFeed';
 
 // --- TYPESCRIPT INTERFACES ---
 
@@ -236,13 +237,13 @@ export default function Home() {
           {/* Mockup-ul */}
           <div className="bg-neutral-950/50 border border-white/10 p-2 rounded-[3rem] shadow-2xl backdrop-blur-xl ring-1 ring-white/10">
             <div className="rounded-[2.5rem] overflow-hidden bg-black h-[500px]">
-               <LiveFeedMockup />
+                <LiveHiveFeed />
             </div>
           </div>
 
           {/* Badge plutitor */}
           <div className="absolute -top-6 -right-6 bg-yellow-400 text-black font-black text-[10px] px-4 py-2 rounded-full shadow-lg transform rotate-12 border-2 border-black animate-bounce-slow">
-              LIVE PREVIEW 🔴
+              LIVE Hive 🔴
           </div>
         </div>
       </div>
