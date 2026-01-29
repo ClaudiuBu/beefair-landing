@@ -12,6 +12,7 @@ import { motion, AnimatePresence } from 'framer-motion';
 import { useRouter } from 'next/navigation';
 import CookieConsent from '@/components/CookieConsent';
 import StingGenerator from '@/components/StingGenerator';
+import  LiveFeedMockup  from '@/components/LiveFeedMockup';
 import Hero from '@/components/Hero';
 
 // --- TYPESCRIPT INTERFACES ---
@@ -210,7 +211,8 @@ export default function Home() {
           <h2 className="text-5xl md:text-7xl font-[1000] tracking-tighter italic">GENERATE YOUR <GoldText>FIRST STING.</GoldText></h2>
           <p className="text-neutral-400 mt-4 italic">Testează generatorul nostru de &apos;Sting&apos; direct aici!</p>
         </div>
-        <StingGenerator />
+        {/* <StingGenerator /> */}
+        <LiveFeedMockup />
       </section>
       
    
