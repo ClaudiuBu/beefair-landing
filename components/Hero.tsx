@@ -108,6 +108,8 @@ export default function Hero() {
     {/* Glow-ul din spate - acum e baza formei, nu rama */}
     <div className="absolute -inset-4 bg-gradient-to-tr from-yellow-400/20 via-transparent to-yellow-400/10 blur-3xl opacity-50 group-hover:opacity-80 transition-opacity duration-700"></div>
 
+    {/* 2. UMBRA AMBIENTALĂ (Proiectată mai jos și mai moale) */}
+    <div className="absolute -bottom-16 left-1/2 -translate-x-1/2 w-[100%] h-12 bg-black/40 blur-[40px] rounded-[100%] z-[-2]"></div>
     <motion.div 
       className="relative transform lg:rotate-y-[-12deg] lg:rotate-x-[5deg] transition-all duration-700 ease-out group-hover:rotate-0"
       style={{ transformStyle: 'preserve-3d' }}
