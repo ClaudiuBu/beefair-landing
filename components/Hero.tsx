@@ -114,17 +114,14 @@ export default function Hero() {
     >
       {/* Rama "invizibilă" - doar o linie fină de lumină */}
       <div className="relative rounded-[3rem] p-[1px] bg-gradient-to-b from-white/20 to-transparent shadow-[0_0_80px_-20px_rgba(247,224,28,0.3)]">
-        
         <div className="rounded-[2.9rem] bg-black overflow-hidden relative">
-          {/* Notch-ul - acum e parte din sticlă, nu din ramă */}
-          <div className="absolute top-0 inset-x-0 h-6 bg-black w-28 mx-auto rounded-b-2xl z-50 border-x border-b border-white/5"></div>
-          
-          {/* Efect de reflexie pe "sticlă" care nu se mișcă cu scroll-ul */}
-          <div className="absolute inset-0 bg-gradient-to-tr from-white/10 via-transparent to-transparent pointer-events-none z-40 opacity-50"></div>
-
           {/* Componenta ta de Feed */}
-          <div className="h-[620px] w-[310px]">
-            <LiveFeedMockup /> 
+          <div className="h-[630px] w-[310px] relative">
+            {/* Efect de reflexie pe "sticlă" care nu se mișcă cu scroll-ul */}
+              <div className="absolute inset-0 bg-gradient-to-tr from-white/10 via-transparent to-transparent pointer-events-none z-40 opacity-50"></div>
+                <LiveFeedMockup /> 
+                {/* Notch-ul - acum e parte din sticlă, nu din ramă */}
+              <div className="absolute top-0 inset-x-0 h-6 bg-black w-28 mx-auto rounded-b-2xl z-50 border-x border-b border-white/5"></div>
           </div>
         </div>
       </div>
